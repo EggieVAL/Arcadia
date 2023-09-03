@@ -403,7 +403,6 @@ Arcadia.csproj
 Arcadia.sln
 Content/bin
 Content/obj
-Content/Content.mgcb
 Icon.bmp
 Icon.ico
 app.manifest
