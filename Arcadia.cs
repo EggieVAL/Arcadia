@@ -37,7 +37,9 @@ namespace Arcadia
         /// </summary>
         protected override void Initialize()
         {
-            _scene = new Scene(this, 1920, 1080);
+            _screen = new Screen(_graphics, Window);
+            _scene = new Scene(this, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
+                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
             _camera = new Camera(_scene);
 
             base.Initialize();
@@ -71,6 +73,8 @@ namespace Arcadia
         protected override void Update(GameTime gt)
         {
             KeyManager.Instance.Update();
+            MouseManager.Instance.Update();
+            _screen.Update();
 
             _player.Update(gt);
             _camera.Update(gt);
@@ -106,6 +110,8 @@ namespace Arcadia
         }
 
         private GraphicsDeviceManager _graphics;
+
+        private Screen _screen;
 
         private Scene _scene;
         private Camera _camera;
