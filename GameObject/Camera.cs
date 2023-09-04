@@ -57,12 +57,21 @@ namespace Arcadia.GameObject
         }
 
         /// <summary>
-        ///     The field of view of the camera.
+        ///     The vertical field of view.
         /// </summary>
-        public float FOV
+        public float VFOV
         {
-            get => _fov;
-            set => _fov = value;
+            get => _vfov;
+            set => _vfov = value;
+        }
+
+        /// <summary>
+        ///     The horizontal field of view.
+        /// </summary>
+        public float HFOV
+        {
+            get => _hfov;
+            set => _hfov = value;
         }
 
         /// <summary>
@@ -110,12 +119,13 @@ namespace Arcadia.GameObject
         public Camera(Scene scene, float unitx, float unity) : base(unitx, unity)
         {
             AspectRatio = (float) scene.Width / scene.Height;
-            FOV = MathHelper.PiOver2;
+            VFOV = MathHelper.PiOver2;
+            HFOV = 2 * MathF.Atan(MathF.Tan(0.5f * VFOV) * AspectRatio);
 
-            MinZ = 64;
-            MaxZ = GetBaseZ(scene.Height);
+            MinZ = GetZFromWidth(60 * Grid.Size);
+            MaxZ = GetZFromHeight(scene.Height);
             Z = MaxZ;
-            ZoomRate = 0.256f;
+            ZoomRate = 0.03f;
 
             Target = null;
             UpdateMatrices();
@@ -144,11 +154,11 @@ namespace Arcadia.GameObject
             KeyManager manager = KeyManager.Instance;
             if (manager.IsKeyDown(Keys.OemPlus))
             {
-                Z -= MathF.Round(ZoomRate * gt.ElapsedGameTime.Milliseconds);
+                Z -= ZoomRate * MathF.Pow(2, 0.01f * Z) * gt.ElapsedGameTime.Milliseconds;
             }
-            else if (manager.IsKeyDown(Keys.OemMinus))
+            if (manager.IsKeyDown(Keys.OemMinus))
             {
-                Z += MathF.Round(ZoomRate * gt.ElapsedGameTime.Milliseconds);
+                Z += ZoomRate * MathF.Pow(2, 0.01f * Z) * gt.ElapsedGameTime.Milliseconds;
             }
         }
 
@@ -159,7 +169,7 @@ namespace Arcadia.GameObject
         public void UpdateMatrices()
         {
             _projection = Matrix.CreatePerspectiveFieldOfView(
-                FOV, AspectRatio, MinZ, MaxZ);
+                VFOV, AspectRatio, 1, MaxZ);
             _view = Matrix.CreateLookAt(new Vector3(0, 0, Z),
                 Vector3.Zero, Vector3.Up);
             _world = Matrix.CreateWorld(new Vector3(-UnitX, -UnitY, 0),
@@ -182,7 +192,7 @@ namespace Arcadia.GameObject
         /// <param name="height">The height of a scene in units.</param>
         public void GetExtents(out float width, out float height)
         {
-            height = GetHeight();
+            height = Z * MathF.Tan(0.5f * VFOV) * 2f;
             width = height * AspectRatio;
         }
         
@@ -204,21 +214,37 @@ namespace Arcadia.GameObject
         }
 
         /// <summary>
+        ///     Calculates and returns the z-coordinate needed for the camera to
+        ///     see <paramref name="width"/> units.
+        /// </summary>
+        /// <param name="width">The width in units.</param>
+        /// <returns>
+        ///     The z-coordinate needed to see <paramref name="width"/> units.
+        /// </returns>
+        public float GetZFromWidth(float width)
+        {
+            return 0.5f * width / MathF.Tan(0.5f * HFOV);
+        }
+
+        /// <summary>
+        ///     Calculates and returns the z-coordinate needed for the camera to
+        ///     see <paramref name="height"/> units.
+        /// </summary>
+        /// <param name="height">The height in units.</param>
+        /// <returns>
+        ///     The z-coordinate needed to see <paramref name="height"/> units.
+        /// </returns>
+        public float GetZFromHeight(float height)
+        {
+            return 0.5f * height / MathF.Tan(0.5f * VFOV);
+        }
+
+        /// <summary>
         ///     Resets the z-coordinate of a camera to its maximum z-coordinate.
         /// </summary>
         public void ResetZ()
         {
             Z = MaxZ;
-        }
-
-        private float GetHeight()
-        {
-            return Z * MathF.Tan(0.5f * FOV) * 2f;
-        }
-
-        private float GetBaseZ(float height)
-        {
-            return 0.5f * height / MathF.Tan(0.5f * FOV);
         }
 
         private ARenderableObject _target;
@@ -228,7 +254,8 @@ namespace Arcadia.GameObject
         private Matrix _world;
 
         private float _aspectRatio;
-        private float _fov;
+        private float _vfov;
+        private float _hfov;
 
         private float _minZ;
         private float _maxZ;
