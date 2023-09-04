@@ -12,6 +12,16 @@ namespace Arcadia.Graphics
     public sealed class Screen
     {
         /// <summary>
+        ///     Whether the screen is in full-screen.
+        /// </summary>
+        public bool IsFullScreen { get; private set; }
+
+        /// <summary>
+        ///     Whether the screen is in borderless full-screen.
+        /// </summary>
+        public bool IsBorderless { get; private set; }
+
+        /// <summary>
         ///     Constructs a <c>Screen</c> class that's bound to the
         ///     GameWindow <paramref name="window"/>.
         /// </summary>
@@ -48,14 +58,14 @@ namespace Arcadia.Graphics
         /// </summary>
         public void ToggleFullScreen()
         {
-            bool wasFullScreen = _fullscreen;
-            if (_borderless)
+            bool wasFullScreen = IsFullScreen;
+            if (IsBorderless)
             {
-                _borderless = false;
+                IsBorderless = false;
             }
             else
             {
-                _fullscreen = !_fullscreen;
+                IsFullScreen = !IsFullScreen;
             }
             ApplyFullScreenChanges(wasFullScreen);
         }
@@ -65,15 +75,15 @@ namespace Arcadia.Graphics
         /// </summary>
         public void ToggleBorderless()
         {
-            bool wasFullScreen = _fullscreen;
-            _borderless = !_borderless;
-            _fullscreen = _borderless;
+            bool wasFullScreen = IsFullScreen;
+            IsBorderless = !IsBorderless;
+            IsFullScreen = IsBorderless;
             ApplyFullScreenChanges(wasFullScreen);
         }
 
         private void ApplyFullScreenChanges(bool wasFullScreen)
         {
-            if (_fullscreen)
+            if (IsFullScreen)
             {
                 if (wasFullScreen)
                 {
@@ -92,7 +102,7 @@ namespace Arcadia.Graphics
 
         private void ApplyHardwareMode()
         {
-            _graphics.HardwareModeSwitch = !_borderless;
+            _graphics.HardwareModeSwitch = !IsBorderless;
             _graphics.ApplyChanges();
         }
 
@@ -103,7 +113,7 @@ namespace Arcadia.Graphics
 
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            _graphics.HardwareModeSwitch = !_borderless;
+            _graphics.HardwareModeSwitch = !IsBorderless;
             _graphics.IsFullScreen = true;
 
             _graphics.ApplyChanges();
@@ -119,9 +129,6 @@ namespace Arcadia.Graphics
 
         private GraphicsDeviceManager _graphics;
         private GameWindow _window;
-
-        private bool _fullscreen;
-        private bool _borderless;
 
         private int _width;
         private int _height;

@@ -2,6 +2,7 @@
 using Arcadia.GameWorld;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Arcadia.GameObject.Characters
@@ -16,28 +17,17 @@ namespace Arcadia.GameObject.Characters
         /// <summary>
         ///     The x-component of a character's velocity.
         /// </summary>
-        public float VelX
-        {
-            get => _velx;
-            set => _velx = value;
-        }
+        public float VelX { get; set; }
 
         /// <summary>
         ///     The y-component of a character's velocity.
         /// </summary>
-        public float VelY
-        {
-            get => _vely;
-            set => _vely = value;
-        }
+        public float VelY { get; set; }
         
         /// <summary>
         ///     The velocity of a character.
         /// </summary>
-        public Vector2 Vel
-        {
-            get => new Vector2(VelX, VelY);
-        }
+        public Vector2 Vel => new Vector2(VelX, VelY);
 
         /// <summary>
         ///     Constructs a character with some texture in some bounding box.
@@ -344,8 +334,5 @@ namespace Arcadia.GameObject.Characters
             // check world boundary
             return false;
         }
-
-        private float _velx;
-        private float _vely;
     }
 }

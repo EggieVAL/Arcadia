@@ -14,6 +14,16 @@ namespace Arcadia.Input
         public static readonly KeyManager Instance = new KeyManager();
 
         /// <summary>
+        ///     The current keyboard state.
+        /// </summary>
+        public KeyboardState CurrentState { get; private set; }
+
+        /// <summary>
+        ///     The previous keyboard state.
+        /// </summary>
+        public KeyboardState PreviousState { get; private set; }
+
+        /// <summary>
         ///     Whether the key was clicked.
         /// </summary>
         /// <param name="key">A key.</param>
@@ -23,7 +33,7 @@ namespace Arcadia.Input
         /// </returns>
         public bool IsKeyClicked(Keys key)
         {
-            return _curr.IsKeyDown(key) && _prev.IsKeyUp(key);
+            return CurrentState.IsKeyDown(key) && PreviousState.IsKeyUp(key);
         }
 
         /// <summary>
@@ -36,7 +46,7 @@ namespace Arcadia.Input
         /// </returns>
         public bool IsKeyDown(Keys key)
         {
-            return _curr.IsKeyDown(key);
+            return CurrentState.IsKeyDown(key);
         }
 
         /// <summary>
@@ -44,17 +54,14 @@ namespace Arcadia.Input
         /// </summary>
         public void Update()
         {
-            _prev = _curr;
-            _curr = Keyboard.GetState();
+            PreviousState = CurrentState;
+            CurrentState = Keyboard.GetState();
         }
 
         private KeyManager()
         {
-            _prev = Keyboard.GetState();
-            _curr = _prev;
+            PreviousState = Keyboard.GetState();
+            CurrentState = PreviousState;
         }
-
-        private KeyboardState _curr;
-        private KeyboardState _prev;
     }
 }

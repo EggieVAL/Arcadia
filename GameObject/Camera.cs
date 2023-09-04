@@ -12,67 +12,42 @@ namespace Arcadia.GameObject
     ///     captures a scene in the world. A camera can follow a renderable
     ///     game object or can be stationed at a specified position.
     /// </summary>
-    public sealed class Camera : AGameObject
+    public sealed class Camera : ARenderableObject
     {
         /// <summary>
         ///     The target the camera is following.
         /// </summary>
-        public ARenderableObject Target
-        {
-            get => _target;
-            private set => _target = value;
-        }
+        public ARenderableObject Target { get; private set; }
 
         /// <summary>
         ///     The projection matrix.
         /// </summary>
-        public Matrix Projection
-        {
-            get => _projection;
-        }
+        public Matrix Projection { get; private set; }
 
         /// <summary>
         ///     The view matrix.
         /// </summary>
-        public Matrix View
-        {
-            get => _view;
-        }
+        public Matrix View { get; private set; }
 
         /// <summary>
         ///     The world matrix.
         /// </summary>
-        public Matrix World
-        {
-            get => _world;
-        }
+        public Matrix World { get; private set; }
 
         /// <summary>
         ///     The aspect ratio of the scene.
         /// </summary>
-        public float AspectRatio
-        {
-            get => _aspectRatio;
-            set => _aspectRatio = value;
-        }
+        public float AspectRatio { get; set; }
 
         /// <summary>
         ///     The vertical field of view.
         /// </summary>
-        public float VFOV
-        {
-            get => _vfov;
-            set => _vfov = value;
-        }
+        public float VFOV { get; set; }
 
         /// <summary>
         ///     The horizontal field of view.
         /// </summary>
-        public float HFOV
-        {
-            get => _hfov;
-            set => _hfov = value;
-        }
+        public float HFOV { get; set; }
 
         /// <summary>
         ///     The z-coordinate of the camera in units.
@@ -86,29 +61,17 @@ namespace Arcadia.GameObject
         /// <summary>
         ///     The minimum z-coordinate the camera can be at in units.
         /// </summary>
-        public float MinZ
-        {
-            get => _minZ;
-            set => _minZ = value;
-        }
+        public float MinZ { get; set; }
 
         /// <summary>
         ///     The maximum z-coordinate the camera can be at in units.
         /// </summary>
-        public float MaxZ
-        {
-            get => _maxZ;
-            set => _maxZ = value;
-        }
+        public float MaxZ { get; set; }
 
         /// <summary>
         ///     The zoom rate of the camera in terms of time.
         /// </summary>
-        public float ZoomRate
-        {
-            get => _zoomRate;
-            set => _zoomRate = value;
-        }
+        public float ZoomRate { get; set; }
 
         /// <summary>
         ///     Constructs a camera capturing a scene at some position (x, y).
@@ -116,7 +79,8 @@ namespace Arcadia.GameObject
         /// <param name="scene">The scene a camera is capturing.</param>
         /// <param name="unitx">The x-coordinate in units.</param>
         /// <param name="unity">The y-coordinate in units.</param>
-        public Camera(Scene scene, float unitx, float unity) : base(unitx, unity)
+        public Camera(Scene scene, float unitx, float unity) :
+            base(null, new Rectangle((int) unitx, (int) unity, 0, 0))
         {
             AspectRatio = (float) scene.Width / scene.Height;
             VFOV = MathHelper.PiOver2;
@@ -168,11 +132,11 @@ namespace Arcadia.GameObject
         /// </summary>
         public void UpdateMatrices()
         {
-            _projection = Matrix.CreatePerspectiveFieldOfView(
+            Projection = Matrix.CreatePerspectiveFieldOfView(
                 VFOV, AspectRatio, 1, MaxZ);
-            _view = Matrix.CreateLookAt(new Vector3(0, 0, Z),
+            View = Matrix.CreateLookAt(new Vector3(0, 0, Z),
                 Vector3.Zero, Vector3.Up);
-            _world = Matrix.CreateWorld(new Vector3(-UnitX, -UnitY, 0),
+            World = Matrix.CreateWorld(new Vector3(-UnitX, -UnitY, 0),
                 Vector3.Forward, Vector3.Up);
         }
 
@@ -247,20 +211,6 @@ namespace Arcadia.GameObject
             Z = MaxZ;
         }
 
-        private ARenderableObject _target;
-
-        private Matrix _projection;
-        private Matrix _view;
-        private Matrix _world;
-
-        private float _aspectRatio;
-        private float _vfov;
-        private float _hfov;
-
-        private float _minZ;
-        private float _maxZ;
         private float _z;
-
-        private float _zoomRate;
     }
 }

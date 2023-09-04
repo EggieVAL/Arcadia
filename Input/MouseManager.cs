@@ -17,13 +17,33 @@ namespace Arcadia.Input
         public static readonly MouseManager Instance = new MouseManager();
 
         /// <summary>
+        ///     The previous mouse state.
+        /// </summary>
+        public MouseState PreviousState { get; private set; }
+
+        /// <summary>
+        ///     The current mouse state.
+        /// </summary>
+        public MouseState CurrentState { get; private set; }
+
+        /// <summary>
+        ///     The current x-position of the mouse.
+        /// </summary>
+        public int PosX => CurrentState.X;
+        
+        /// <summary>
+        ///     The current y-position of the mouse.
+        /// </summary>
+        public int PosY => CurrentState.Y;
+
+        /// <summary>
         ///     Whether the left mouse button was clicked.
         /// </summary>
         /// <returns>Returns <c>true</c> if LMB was clicked.</returns>
         public bool IsLeftButtonClicked()
         {
-            return _curr.LeftButton == ButtonState.Pressed &&
-                   _prev.LeftButton == ButtonState.Released;
+            return CurrentState.LeftButton == ButtonState.Pressed &&
+                   PreviousState.LeftButton == ButtonState.Released;
         }
 
         /// <summary>
@@ -32,7 +52,7 @@ namespace Arcadia.Input
         /// <returns>Returns <c>true</c> if LMB is down.</returns>
         public bool IsLeftButtonDown()
         {
-            return _curr.LeftButton == ButtonState.Pressed;
+            return CurrentState.LeftButton == ButtonState.Pressed;
         }
 
         /// <summary>
@@ -41,8 +61,8 @@ namespace Arcadia.Input
         /// <returns>Returns <c>true</c> if MMB was clicked.</returns>
         public bool IsMiddleButtonClicked()
         {
-            return _curr.MiddleButton == ButtonState.Pressed &&
-                   _prev.MiddleButton == ButtonState.Released;
+            return CurrentState.MiddleButton == ButtonState.Pressed &&
+                   PreviousState.MiddleButton == ButtonState.Released;
         }
 
         /// <summary>
@@ -51,7 +71,7 @@ namespace Arcadia.Input
         /// <returns>Returns <c>true</c> if MMB is down.</returns>
         public bool IsMiddleButtonDown()
         {
-            return _curr.MiddleButton == ButtonState.Pressed;
+            return CurrentState.MiddleButton == ButtonState.Pressed;
         }
 
         /// <summary>
@@ -60,8 +80,8 @@ namespace Arcadia.Input
         /// <returns>Returns <c>true</c> if RMB was clicked.</returns>
         public bool IsRightButtonClicked()
         {
-            return _curr.RightButton == ButtonState.Pressed &&
-                   _prev.RightButton == ButtonState.Released;
+            return CurrentState.RightButton == ButtonState.Pressed &&
+                   PreviousState.RightButton == ButtonState.Released;
         }
 
         /// <summary>
@@ -70,7 +90,7 @@ namespace Arcadia.Input
         /// <returns>Returns <c>true</c> if RMB is down.</returns>
         public bool IsRightButtonDown()
         {
-            return _curr.RightButton == ButtonState.Pressed;
+            return CurrentState.RightButton == ButtonState.Pressed;
         }
 
         /// <summary>
@@ -78,17 +98,14 @@ namespace Arcadia.Input
         /// </summary>
         public void Update()
         {
-            _prev = _curr;
-            _curr = Mouse.GetState();
+            PreviousState = CurrentState;
+            CurrentState = Mouse.GetState();
         }
 
         private MouseManager()
         {
-            _prev = Mouse.GetState();
-            _curr = _prev;
+            PreviousState = Mouse.GetState();
+            CurrentState = PreviousState;
         }
-
-        private MouseState _prev;
-        private MouseState _curr;
     }
 }

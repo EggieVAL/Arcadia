@@ -24,18 +24,12 @@ namespace Arcadia.Graphics
         /// <summary>
         ///     The render target width.
         /// </summary>
-        public int Width
-        {
-            get => _renderTarget.Width;
-        }
+        public int Width => _renderTarget.Width;
 
         /// <summary>
         ///     The render target height.
         /// </summary>
-        public int Height
-        {
-            get => _renderTarget.Height;
-        }
+        public int Height => _renderTarget.Height;
 
         /// <summary>
         ///     Constructs a scene in some resolution for some game.
