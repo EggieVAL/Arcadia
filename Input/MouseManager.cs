@@ -73,6 +73,15 @@ namespace Arcadia.Input
             return _curr.RightButton == ButtonState.Pressed;
         }
 
+        /// <summary>
+        ///     Updates the previous and current mouse state.
+        /// </summary>
+        public void Update()
+        {
+            _prev = _curr;
+            _curr = Mouse.GetState();
+        }
+
         private MouseManager()
         {
             _prev = Mouse.GetState();
