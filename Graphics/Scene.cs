@@ -5,42 +5,41 @@ using System;
 namespace Arcadia.Graphics
 {
     /// <summary>
-    ///     The <c>Scene</c> class is a representation of a scene in a world.
-    ///     Specifically, it captures all the game objects that are renderable
-    ///     in a specific location.
+    /// The <c>Scene</c> class is a representation of a scene in a world. Specifically, it
+    /// captures all the game objects that are renderable in a specific location.
     /// </summary>
     public sealed class Scene : IDisposable
     {
         /// <summary>
-        ///     The minimum resolution the scene will capture.
+        /// The minimum resolution the scene will capture.
         /// </summary>
-        public const int MinResolution = 64;
+        public const int MinimumResolution = 64;
 
         /// <summary>
-        ///     The maximum resolution the scene will capture.
+        /// The maximum resolution the scene will capture.
         /// </summary>
-        public const int MaxResolution = 4096;
+        public const int MaximumResolution = 4096;
 
         /// <summary>
-        ///     The render target width.
+        /// The render target width.
         /// </summary>
         public int Width => _renderTarget.Width;
 
         /// <summary>
-        ///     The render target height.
+        /// The render target height.
         /// </summary>
         public int Height => _renderTarget.Height;
 
         /// <summary>
-        ///     Constructs a scene in some resolution for some game.
+        /// Constructs a scene in some resolution for some game.
         /// </summary>
-        /// <param name="game">A game a scene will capture.</param>
+        /// <param name="game">A game the scene will capture.</param>
         /// <param name="width">The resolution width.</param>
         /// <param name="height">The resolution height.</param>
         public Scene(Game game, int width, int height)
         {
-            width = MathHelper.Clamp(width, MinResolution, MaxResolution);
-            height = MathHelper.Clamp(height, MinResolution, MaxResolution);
+            width = MathHelper.Clamp(width, MinimumResolution, MaximumResolution);
+            height = MathHelper.Clamp(height, MinimumResolution, MaximumResolution);
 
             _game = game;
             _renderTarget = new RenderTarget2D(game.GraphicsDevice, width, height);
@@ -48,16 +47,16 @@ namespace Arcadia.Graphics
         }
 
         /// <summary>
-        ///     Constructs a scene for some game using the resolution of the
-        ///     current display monitor.
+        /// Constructs a scene for some game using the resolution of the current display
+        /// monitor.
         /// </summary>
-        /// <param name="game">A game a scene will capture.</param>
-        public Scene(Game game) : this(game,
-            GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
-            GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height) { }
+        /// <param name="game">A game the scene will capture.</param>
+        public Scene(Game game) : this(game, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
+                                             GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
+        { }
 
         /// <summary>
-        ///     Enables render targeting.
+        /// Enables render targeting.
         /// </summary>
         public void EnableRenderTargeting()
         {
@@ -65,7 +64,7 @@ namespace Arcadia.Graphics
         }
 
         /// <summary>
-        ///     Disables render targeting.
+        /// Disables render targeting.
         /// </summary>
         public void DisableRenderTargeting()
         {
@@ -73,25 +72,24 @@ namespace Arcadia.Graphics
         }
 
         /// <summary>
-        ///     Displays all objects within the render target.
+        /// Displays all the objects within the render target.
         /// </summary>
         /// <param name="manager">The sprite manager.</param>
         /// <param name="isTextureFilteringEnabled">
-        ///     Whether texture filtering is enabled.
+        /// Whether texture filtering is enabled.
         /// </param>
-        public void Display(SpriteManager manager, bool isTextureFilteringEnabled)
+        public void Display(bool isTextureFilteringEnabled)
         {
             Rectangle target = GetRenderTargetDestination();
-            manager.Begin(null, isTextureFilteringEnabled);
-            manager.Draw(_renderTarget, target, Color.White);
-            manager.End();
+            SpriteManager.Begin(null, isTextureFilteringEnabled);
+            SpriteManager.Draw(_renderTarget, target, Color.White);
+            SpriteManager.End();
         }
 
         /// <summary>
-        ///     Gets the render target destination based on the application's
-        ///     and scene's aspect ratios.
+        /// Gets the render target destination based on the application's and scene's aspect ratios.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Returns the render target destination.</returns>
         public Rectangle GetRenderTargetDestination()
         {
             Rectangle backBuffer = _game.GraphicsDevice.PresentationParameters.Bounds;
@@ -100,30 +98,30 @@ namespace Arcadia.Graphics
             int sceneWidth = _renderTarget.Width;
             int sceneHeight = _renderTarget.Height;
 
-            float appRatio = (float) appWidth / appHeight;
-            float sceneRatio = (float) sceneWidth / sceneHeight;
+            float appAspectRatio = (float) appWidth / appHeight;
+            float sceneAspectRatio = (float) sceneWidth / sceneHeight;
 
             float x = 0f;
             float y = 0f;
             float width = appWidth;
             float height = appHeight;
 
-            if (appRatio > sceneRatio)
+            if (appAspectRatio > sceneAspectRatio)
             {
-                width = appHeight * sceneRatio;
+                width = appHeight * sceneAspectRatio;
                 x = (appWidth - width) / 2f;
             }
-            else if (appRatio < sceneRatio)
+            else if (appAspectRatio < sceneAspectRatio)
             {
-                height = width / sceneRatio;
+                height = width / sceneAspectRatio;
                 y = (appHeight - height) / 2f;
             }
             return new Rectangle((int) x, (int) y, (int) width, (int) height);
         }
 
         /// <summary>
-        ///     Performs application-defined tasks associated with freeing,
-        ///     releasing, or resetting unmanaged resources.
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting
+        /// unmanaged resources.
         /// </summary>
         public void Dispose()
         {

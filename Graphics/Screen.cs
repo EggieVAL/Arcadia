@@ -2,28 +2,27 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace Arcadia.Graphics
 {
     /// <summary>
-    ///     The <c>Screen</c> class manages the screen window of the game.
+    /// The <c>Screen</c> class manages the screen window of the game.
     /// </summary>
     public sealed class Screen
     {
         /// <summary>
-        ///     Whether the screen is in full-screen.
+        /// Whether the screen is in full-screen.
         /// </summary>
         public bool IsFullScreen { get; private set; }
 
         /// <summary>
-        ///     Whether the screen is in borderless full-screen.
+        /// Whether the screen is in borderless full-screen.
         /// </summary>
         public bool IsBorderless { get; private set; }
 
         /// <summary>
-        ///     Constructs a <c>Screen</c> class that's bound to the
-        ///     GameWindow <paramref name="window"/>.
+        /// Constructs a <c>Screen</c> class that's bound to the
+        /// game <paramref name="window"/>.
         /// </summary>
         /// <param name="graphics">The graphics device manager.</param>
         /// <param name="window">The game window.</param>
@@ -34,15 +33,13 @@ namespace Arcadia.Graphics
         }
 
         /// <summary>
-        ///     This <c>Update</c> method updates the screen state of the
-        ///     game according to keyboard input(s).
+        /// Updates the screen state of the game according to keyboard input(s).
         /// </summary>
         public void Update()
         {
-            KeyManager manager = KeyManager.Instance;
-            if (manager.IsKeyClicked(Keys.F11))
+            if (KeyListener.IsKeyClicked(Keys.F11))
             {
-                if (manager.IsKeyDown(Keys.LeftControl))
+                if (KeyListener.IsKeyPressed(Keys.LeftControl))
                 {
                     ToggleBorderless();
                 }
@@ -54,7 +51,7 @@ namespace Arcadia.Graphics
         }
 
         /// <summary>
-        ///     Toggles full screen.
+        /// Toggles full screen.
         /// </summary>
         public void ToggleFullScreen()
         {
@@ -71,7 +68,7 @@ namespace Arcadia.Graphics
         }
 
         /// <summary>
-        ///     Toggles borderless full screen.
+        /// Toggles borderless full screen.
         /// </summary>
         public void ToggleBorderless()
         {
