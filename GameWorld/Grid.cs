@@ -1,307 +1,265 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Arcadia.GameObject.Tiles;
+using Microsoft.Xna.Framework;
 using System;
 
 namespace Arcadia.GameWorld
 {
     /// <summary>
-    ///     The <c>Grid</c> class is a grid representation of a world. Each cell in
-    ///     a grid is some type of tile.
+    /// The <c>Grid</c> class is a grid representation of a world. Each cell in a grid is some type of tile.
     /// </summary>
-    /// <seealso cref="GameObject.Tiles.ATile"/>
+    /// <seealso cref="GameObject.Tiles.Tile"/>
     public sealed class Grid
     {
         /// <summary>
-        ///     The size of each cell in the grid.
+        /// The size of each cell in the grid.
         /// </summary>
         public const int Size = 16;
 
         /// <summary>
-        ///     Finds where some <paramref name="x"/> coordinate is in the grid.
-        ///     <para>
-        ///         <br>Grid X = <paramref name="x"/> / Width</br>
-        ///     </para>
-        ///     <para>
-        ///         <br>Rounds the calculated grid position to the nearest integer.</br>
-        ///     </para>
+        /// Finds where some coordinate is in the grid.
+        /// <para>
+        ///     <br>Rounds the calculated grid position to the nearest integer.</br>
+        /// </para>
         /// </summary>
-        /// <param name="x">The x-coordinate in units.</param>
+        /// <param name="coordinate">The coordinate in units.</param>
         /// <returns>
-        ///     Returns where the given <paramref name="x"/> is in the grid.
+        /// Returns where the given <paramref name="coordinate"/> is in the grid.
         /// </returns>
-        public static int GetPosX(float x)
+        public static int GetTilePosition(float coordinate)
         {
-            return (int) (x / Size);
+            return (int) (coordinate / Size);
         }
 
         /// <summary>
-        ///     Finds where some <paramref name="y"/> coordinate is in the grid.
-        ///     <para>
-        ///         <br>Grid Y = <paramref name="y"/> / Height</br>
-        ///     </para>
-        ///     <para>
-        ///         <br>Rounds the calculated grid position to the nearest integer.</br>
-        ///     </para>
-        /// </summary>
-        /// <param name="y">The y-coordinate in units.</param>
-        /// <returns>
-        ///     Returns where the given <paramref name="y"/> is in the grid.
-        /// </returns>
-        public static int GetPosY(float y)
-        {
-            return (int) (y / Size);
-        }
-
-        /// <summary>
-        ///     Finds where some position is in the grid.
-        ///     <para>
-        ///         <br>Grid X = <paramref name="x"/> / Width</br>
-        ///         <br>Grid Y = <paramref name="y"/> / Height</br>
-        ///     </para>
-        ///     <para>
-        ///         <br>Rounds the calculated grid position to the nearest integer.</br>
-        ///     </para>
+        /// Finds where some position is in the grid.
+        /// <para>
+        ///     <br>Rounds the calculated grid position to the nearest integer.</br>
+        /// </para>
         /// </summary>
         /// <param name="x">The x-coordinate in units.</param>
         /// <param name="y">The y-coordinate in units.</param>
         /// <returns>
-        ///     Returns where the given (<paramref name="x"/>, <paramref name="y"/>) is
-        ///     in the grid.
+        /// Returns where the given (<paramref name="x"/>, <paramref name="y"/>) is
+        /// in the grid.
         /// </returns>
-        public static int[] GetPos(float x, float y)
+        public static int[] GetTilePosition(float x, float y)
         {
-            int posx = (int) (x / Size);
-            int posy = (int) (y / Size);
-            return new int[] { posx, posy };
+            int positionX = (int) (x / Size);
+            int positionY = (int) (y / Size);
+            return new int[] { positionX, positionY };
         }
 
         /// <summary>
-        ///     Finds where some position is in the grid.
-        ///     <para>
-        ///         <br>Grid X = <paramref name="pos"/>[0] / Width</br>
-        ///         <br>Grid Y = <paramref name="pos"/>[1] / Height</br>
-        ///     </para>
-        ///     <para>
-        ///         <br>Rounds the calculated grid position to the nearest integer.</br>
-        ///     </para>
+        /// Finds where some position is in the grid.
+        /// <para>
+        ///     <br>Rounds the calculated grid position to the nearest integer.</br>
+        /// </para>
         /// </summary>
-        /// <param name="pos">
-        ///     The position; its components are in units.
-        ///     <para>
-        ///         <br><paramref name="pos"/>[0] = x-coordinate</br>
-        ///         <br><paramref name="pos"/>[1] = y-coordinate</br>
-        ///     </para>
+        /// <param name="position">
+        /// The position; its components are in units.
+        /// <br><paramref name="position"/>[0] = x-coordinate</br>
+        /// <br><paramref name="position"/>[1] = y-coordinate</br>
         /// </param>
         /// <returns>
-        ///     Returns where the given position <paramref name="pos"/> is in the grid
+        /// Returns where the given position <paramref name="position"/> is in the grid.
         /// </returns>
-        public static int[] GetPos(float[] pos)
+        public static int[] GetTilePosition(float[] position)
         {
-            int posx = (int) (pos[0] / Size);
-            int posy = (int) (pos[1] / Size);
-            return new int[] { posx, posy };
+            int positionX = (int) (position[0] / Size);
+            int positionY = (int) (position[1] / Size);
+            return new int[] { positionX, positionY };
         }
 
         /// <summary>
-        ///     Finds where some vector is in the grid.
-        ///     <para>
-        ///         <br>Grid X = <paramref name="vec"/>.X / Width</br>
-        ///         <br>Grid Y = <paramref name="vec"/>.Y / Height</br>
-        ///     </para>
-        ///     <para>
-        ///         <br>Rounds the calculated grid position to the nearest integer.</br>
-        ///     </para>
+        /// Finds where some vector is in the grid.
+        /// <para>
+        ///     <br>Rounds the calculated grid position to the nearest integer.</br>
+        /// </para>
         /// </summary>
-        /// <param name="vec"> The vector; its components are in units.</param>
+        /// <param name="vector"> The vector; its components are in units.</param>
         /// <returns>
-        ///     Returns where the given vector <paramref name="vec"/> is in the grid.
+        /// Returns where the given vector <paramref name="vector"/> is in the grid.
         /// </returns>
-        public static int[] GetPos(Vector2 vec)
+        public static int[] GetTilePosition(Vector2 vector)
         {
-            int posx = (int) (vec.X / Size);
-            int posy = (int) (vec.Y / Size);
-            return new int[] { posx, posy };
+            int positionX = (int) (vector.X / Size);
+            int positionY = (int) (vector.Y / Size);
+            return new int[] { positionX, positionY };
         }
 
         /// <summary>
-        ///     Converts some <paramref name="x"/> coordinate in the grid into its
-        ///     respective unit component.
-        ///     <para>
-        ///         <br>Unit X = <paramref name="x"/> * Width</br>
-        ///     </para>
+        /// Converts some coordinate in the grid space into its respective unit component.
         /// </summary>
-        /// <param name="x">The x-coordinate in the grid.</param>
+        /// <param name="tileCoordinate">The coordinate in the grid space.</param>
         /// <returns>
-        ///     Returns the unit value of the given <paramref name="x"/>.
+        /// Returns the unit value of the given <paramref name="tileCoordinate"/>.
         /// </returns>
-        public static float ConvertToUnitX(int x)
+        public static float ConvertToUnit(int tileCoordinate)
         {
-            return x * Size;
+            return tileCoordinate * Size;
         }
 
         /// <summary>
-        ///     Converts some <paramref name="y"/> coordinate in the grid into its
-        ///     respective unit component.
-        ///     <para>
-        ///         <br>Unit Y = <paramref name="y"/> * Width</br>
-        ///     </para>
+        /// Converts some position in the grid space into its respective unit component.
         /// </summary>
-        /// <param name="y">The y-coordinate in the grid.</param>
+        /// <param name="tileX">The x-coordinate in the grid space.</param>
+        /// <param name="tileY">The y-coordinate in the grid space.</param>
         /// <returns>
-        ///     Returns the unit value of the given <paramref name="y"/>.
+        /// Returns the unit value of the given (<paramref name="tileX"/>, <paramref name="tileY"/>).
         /// </returns>
-        public static float ConvertToUnitY(int y)
+        public static float[] ConvertToUnits(int tileX, int tileY)
         {
-            return y * Size;
+            float positionX = tileX * Size;
+            float positionY = tileY * Size;
+            return new float[] { positionX, positionY };
         }
 
         /// <summary>
-        ///     Converts some position in the grid into its respective unit component.
-        ///     <para>
-        ///         <br>Unit X = <paramref name="x"/> * Width</br>
-        ///         <br>Unit Y = <paramref name="y"/> * Height</br>
-        ///     </para>
+        /// Converts some position in the grid space into its respective unit component.
         /// </summary>
-        /// <param name="x">The x-coordinate in the grid.</param>
-        /// <param name="y">The y-coordinate in the grid.</param>
-        /// <returns>
-        ///     Returns the unit value of the given (<paramref name="x"/>,
-        ///     <paramref name="y"/>).
-        /// </returns>
-        public static float[] ConvertToUnit(int x, int y)
-        {
-            float posx = x * Size;
-            float posy = y * Size;
-            return new float[] { posx, posy };
-        }
-
-        /// <summary>
-        ///     Converts some position in the grid into its respective unit component.
-        ///     <para>
-        ///         <br>Unit X = <paramref name="pos"/>[0] * Width</br>
-        ///         <br>Unit Y = <paramref name="pos"/>[1] * Height</br>
-        ///     </para>
-        /// </summary>
-        /// <param name="pos">
-        ///     The position in the grid.
-        ///     <para>
-        ///         <br><paramref name="pos"/>[0] = x-coordinate</br>
-        ///         <br><paramref name="pos"/>[1] = y-coordinate</br>
-        ///     </para>
+        /// <param name="tilePosition">
+        /// The position in the grid space.
+        /// <br><paramref name="tilePosition"/>[0] = x-coordinate</br>
+        /// <br><paramref name="tilePosition"/>[1] = y-coordinate</br>
         /// </param>
         /// <returns>
-        ///     Returns the unit value of the given position <paramref name="pos"/>.
+        /// Returns the unit value of the given position <paramref name="tilePosition"/>.
         /// </returns>
-        public static float[] ConvertToUnit(int[] pos)
+        public static float[] ConvertToUnits(int[] tilePosition)
         {
-            float posx = pos[0] * Size;
-            float posy = pos[1] * Size;
-            return new float[] { posx, posy };
+            float positionX = tilePosition[0] * Size;
+            float positionY = tilePosition[1] * Size;
+            return new float[] { positionX, positionY };
         }
 
         /// <summary>
-        ///     Converts some vector in the grid into its respective unit component.
-        ///     <para>
-        ///         <br>Unit X = <paramref name="vec"/>.X * Width</br>
-        ///         <br>Unit Y = <paramref name="vec"/>.Y * Height</br>
-        ///     </para>
+        /// Converts some vector in the grid space into its respective unit component.
         /// </summary>
-        /// <param name="vec"> The vector in the grid. </param>
+        /// <param name="tileVector"> The vector in the grid space. </param>
         /// <returns>
-        ///     Returns the unit value of the given vector <paramref name="vec"/>.
+        /// Returns the unit value of the given vector <paramref name="tileVector"/>.
         /// </returns>
-        public static float[] ConvertToUnit(Vector2 vec)
+        public static float[] ConvertToUnits(Vector2 tileVector)
         {
-            float posx = vec.X * Size;
-            float posy = vec.Y * Size;
-            return new float[] { posx, posy };
+            float positionX = tileVector.X * Size;
+            float positionY = tileVector.Y * Size;
+            return new float[] { positionX, positionY };
         }
 
         /// <summary>
-        ///     The integer representation of the tile (<paramref name="x"/>,
-        ///     <paramref name="y"/>).
+        /// The tile in the grid at (<paramref name="tileX"/>, <paramref name="tileY"/>).
         /// </summary>
-        /// <param name="x">The x-coordinate.</param>
-        /// <param name="y">The y-coordinate.</param>
+        /// <param name="tileX">The x-coordinate in the grid space.</param>
+        /// <param name="tileY">The y-coordinate in the grid space.</param>
         /// <returns>
-        ///     Returns the integer representation of the tile (<paramref name="x"/>,
-        ///     <paramref name="y"/>) in the grid. Returns <c>-1</c> if the position
-        ///     is outside the scope of the grid.
+        /// Returns the tile in the grid at (<paramref name="tileX"/>, <paramref name="tileY"/>).
+        /// Returns <c>null</c> if the position is outside the scope of the grid.
         /// </returns>
-        public int this[int x, int y]
+        public Tile this[int tileX, int tileY]
         {
-            get => (InBounds(x, y)) ? _grid[x, y] : -1;
+            get => InBounds(tileX, tileY) ? _grid[tileX, tileY] : null;
             set
             {
-                if (InBounds(x, y))
+                if (InBounds(tileX, tileY))
                 {
-                    _grid[x, y] = value;
+                    _grid[tileX, tileY] = value;
                 }
             }
         }
 
         /// <summary>
-        ///     The width of the grid.
+        /// The tile in the grid at (<paramref name="x"/>, <paramref name="y"/>).
         /// </summary>
-        public int Width => _grid.GetLength(0);
-
-        /// <summary>
-        ///     The height of the grid.
-        /// </summary>
-        public int Height => _grid.GetLength(1);
-
-        /// <summary>
-        ///     The width of the grid in units.
-        /// </summary>
-        public float UnitWidth => Width * Grid.Size;
-
-        /// <summary>
-        ///     The height of the grid in units.
-        /// </summary>
-        public float UnitHeight => Height * Grid.Size;
-
-        /// <summary>
-        ///     Constructs a grid of some <paramref name="width"/> and
-        ///     <paramref name="height"/>.
-        /// </summary>
-        public Grid(int width, int height)
+        /// <param name="x">The x-coordinate in units.</param>
+        /// <param name="y">The y-coordinate in units.</param>
+        /// <returns>
+        /// Returns the tile in the grid at (<paramref name="x"/>, <paramref name="y"/>).
+        /// Returns <c>null</c> if the position is outside the scope of the grid.
+        /// </returns>
+        public Tile this[float x, float y]
         {
-            _grid = new int[width, height];
+            get => InBounds(x, y) ? _grid[GetTilePosition(x), GetTilePosition(y)] : null;
+            set
+            {
+                if (InBounds(x, y))
+                {
+                    _grid[GetTilePosition(x), GetTilePosition(y)] = value;
+                }
+            }
         }
 
         /// <summary>
-        ///     Whether the position (<paramref name="x"/>, <paramref name="y"/>)
-        ///     is in the bounds of the grid.
+        /// The tile width of the grid.
         /// </summary>
-        /// <param name="x">The x-coordinate.</param>
-        /// <param name="y">The y-coordinate.</param>
+        public int TileWidth => _grid.GetLength(0);
+
+        /// <summary>
+        /// The tile height of the grid.
+        /// </summary>
+        public int TileHeight => _grid.GetLength(1);
+
+        /// <summary>
+        /// The width of the grid in units.
+        /// </summary>
+        public float Width => TileWidth * Grid.Size;
+
+        /// <summary>
+        /// The height of the grid in units.
+        /// </summary>
+        public float Height => TileHeight * Grid.Size;
+
+        /// <summary>
+        /// Constructs a grid of some <paramref name="tileWidth"/> and <paramref name="tileHeight"/>.
+        /// </summary>
+        /// <param name="tileWidth">The tile width of a grid.</param>
+        /// <param name="tileHeight">The tile height of a grid.</param>
+        public Grid(int tileWidth, int tileHeight)
+        {
+            _grid = new Tile[tileWidth, tileHeight];
+        }
+
+        /// <summary>
+        /// Constructs a grid of some <paramref name="width"/> and <paramref name="height"/>.
+        /// </summary>
+        /// <param name="width">The width of a grid in units.</param>
+        /// <param name="height">The height of a grid in units.</param>
+        public Grid(float width, float height)
+        {
+            _grid = new Tile[(int)(width / Grid.Size), (int)(height / Grid.Size)];
+        }
+
+        /// <summary>
+        /// Whether the position (<paramref name="tileX"/>, <paramref name="tileY"/>) is in the bounds
+        /// of the grid.
+        /// </summary>
+        /// <param name="tileX">The tile x-coordinate.</param>
+        /// <param name="tileY">The tile y-coordinate.</param>
         /// <returns>
-        ///     Returns true if the position (<paramref name="x"/>,
-        ///     <paramref name="y"/>) is in the bounds of the gridl otherwise
-        ///     false.
+        /// Returns true if the position (<paramref name="tileX"/>, <paramref name="tileY"/>) is in
+        /// the bounds of the grid.
         /// </returns>
-        public bool InBounds(int x, int y)
+        public bool InBounds(int tileX, int tileY)
+        {
+            return (tileX >= 0 && tileX < TileWidth)
+                && (tileY >= 0 && tileY < TileHeight);
+        }
+
+        /// <summary>
+        /// Whether the position (<paramref name="x"/>, <paramref name="y"/>) is in
+        /// the bounds of the grid.
+        /// </summary>
+        /// <param name="x">The x-coordinate in units.</param>
+        /// <param name="y">The y-coordinate in units.</param>
+        /// <returns>
+        /// Returns true if the position (<paramref name="x"/>, <paramref name="y"/>)
+        /// is in the bounds of the grid.
+        /// </returns>
+        public bool InBounds(float x, float y)
         {
             return (x >= 0 && x < Width)
                 && (y >= 0 && y < Height);
         }
 
-        /// <summary>
-        ///     Whether the position (<paramref name="unitx"/>,
-        ///     <paramref name="unity"/>) is in the bounds of the grid.
-        /// </summary>
-        /// <param name="unitx">The x-coordinate in units.</param>
-        /// <param name="unity">The y-coordinate in units.</param>
-        /// <returns>
-        ///     Returns true if the position (<paramref name="unitx"/>,
-        ///     <paramref name="unity"/>) is in the bounds of the grid;
-        ///     otherwise false.
-        /// </returns>
-        public bool InBounds(float unitx, float unity)
-        {
-            return (unitx >= 0 && unitx < UnitWidth)
-                && (unity >= 0 && unity < UnitHeight);
-        }
-
-        private int[,] _grid;
+        private Tile[,] _grid;
     }
 }

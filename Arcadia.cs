@@ -15,7 +15,7 @@ namespace Arcadia
         public static readonly int targetFPS = 240;
 
         /// <summary>
-        ///     Constructs the Arcadia game. Initializes the starting variables.
+        /// Constructs the Arcadia game. Initializes the starting variables.
         /// </summary>
         public Arcadia()
         {
@@ -31,9 +31,9 @@ namespace Arcadia
         }
 
         /// <summary>
-        ///     The <c>Initialize</c> method is called after the constructor but before
-        ///     the main game loop. This is where you can query any required services
-        ///     and load any non-graphic related content.
+        /// The <c>Initialize</c> method is called after the constructor but before
+        /// the main game loop. This is where you can query any required services
+        /// and load any non-graphic related content.
         /// </summary>
         protected override void Initialize()
         {
@@ -46,61 +46,64 @@ namespace Arcadia
         }
 
         /// <summary>
-        ///     The <c>LoadContent</c> method is used to load your game content. It is
-        ///     called only once per game, within the <c>Initialize</c> method, before
-        ///     the man game loop starts.
+        /// The <c>LoadContent</c> method is used to load your game content. It is
+        /// called only once per game, within the <c>Initialize</c> method, before
+        /// the man game loop starts.
         /// </summary>
         protected override void LoadContent()
         {
-            _spriteManager = new SpriteManager(this);
+            SpriteManager.createInstance(this);
+            _world = new World(69, 4, 4);
 
             // TODO: use this.Content to load your game content here
             _playerTexture = Content.Load<Texture2D>("test/playertest");
             _tileTexture = Content.Load<Texture2D>("test/tiletest");
 
-            _player = new Player(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3));
+            _player = new Player(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world);
             _tile = new Dirt(_tileTexture, 0, 0);
+            _world[0, 0] = _tile;
 
             _camera.Follow(_player);
         }
 
         /// <summary>
-        ///     The <c>Update</c> method is called multiple times per second, and it is
-        ///     used to update your game state (e.g. checking for collisions, gathering
-        ///     input, playing audio).
+        /// The <c>Update</c> method is called multiple times per second, and it is
+        /// used to update your game state (e.g. checking for collisions, gathering
+        /// input, playing audio).
         /// </summary>
-        /// <param name="gt"></param>
-        protected override void Update(GameTime gt)
+        /// <param name="gameTime"></param>
+        protected override void Update(GameTime gameTime)
         {
-            KeyManager.Instance.Update();
-            MouseManager.Instance.Update();
+            KeyListener.Update();
+            MouseListener.Update();
             _screen.Update();
 
-            _player.Update(gt);
-            _camera.Update(gt);
+            _player.Update(gameTime);
+            _camera.Update(gameTime);
+            _world.Update(gameTime);
 
-            base.Update(gt);
+            base.Update(gameTime);
         }
 
         /// <summary>
-        ///     Similar to the <c>Update</c> method, the <c>Draw</c> method is also called
-        ///     multiple times per second. This, as the name suggests, is responsible for
-        ///     drawing content to the screen.
+        /// Similar to the <c>Update</c> method, the <c>Draw</c> method is also called
+        /// multiple times per second. This, as the name suggests, is responsible for
+        /// drawing content to the screen.
         /// </summary>
-        /// <param name="gt"></param>
-        protected override void Draw(GameTime gt)
+        /// <param name="gameTime"></param>
+        protected override void Draw(GameTime gameTime)
         {
             _scene.EnableRenderTargeting();
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteManager.Begin(_camera, false);
-            _player.Draw(gt, _spriteManager);
-            _tile.Draw(gt, _spriteManager);
-            _spriteManager.End();
+            SpriteManager.Begin(_camera, false);
+            _player.Draw(gameTime);
+            _world.Draw(gameTime);
+            SpriteManager.End();
 
             _scene.DisableRenderTargeting();
-            _scene.Display(_spriteManager, true);
-            base.Draw(gt);
+            _scene.Display(true);
+            base.Draw(gameTime);
         }
 
         public static void Main(string[] args)
@@ -117,11 +120,11 @@ namespace Arcadia
         private Camera _camera;
 
         private Player _player;
-        private ATile _tile;
+        private Tile _tile;
+
+        private World _world;
 
         private Texture2D _playerTexture;
         private Texture2D _tileTexture;
-
-        private SpriteManager _spriteManager;
     }
 }
