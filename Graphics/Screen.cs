@@ -5,36 +5,18 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Arcadia.Graphics
 {
-    /// <summary>
-    /// The <c>Screen</c> class manages the screen window of the game.
-    /// </summary>
     public sealed class Screen
     {
-        /// <summary>
-        /// Whether the screen is in full-screen.
-        /// </summary>
         public bool IsFullScreen { get; private set; }
 
-        /// <summary>
-        /// Whether the screen is in borderless full-screen.
-        /// </summary>
         public bool IsBorderless { get; private set; }
 
-        /// <summary>
-        /// Constructs a <c>Screen</c> class that's bound to the
-        /// game <paramref name="window"/>.
-        /// </summary>
-        /// <param name="graphics">The graphics device manager.</param>
-        /// <param name="window">The game window.</param>
         public Screen(GraphicsDeviceManager graphics, GameWindow window)
         {
             _graphics = graphics;
             _window = window;
         }
 
-        /// <summary>
-        /// Updates the screen state of the game according to keyboard input(s).
-        /// </summary>
         public void Update()
         {
             if (KeyListener.IsKeyClicked(Keys.F11))
@@ -50,9 +32,6 @@ namespace Arcadia.Graphics
             }
         }
 
-        /// <summary>
-        /// Toggles full screen.
-        /// </summary>
         public void ToggleFullScreen()
         {
             bool wasFullScreen = IsFullScreen;
@@ -67,9 +46,6 @@ namespace Arcadia.Graphics
             ApplyFullScreenChanges(wasFullScreen);
         }
 
-        /// <summary>
-        /// Toggles borderless full screen.
-        /// </summary>
         public void ToggleBorderless()
         {
             bool wasFullScreen = IsFullScreen;

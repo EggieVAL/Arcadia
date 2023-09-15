@@ -31,9 +31,8 @@ namespace Arcadia
         }
 
         /// <summary>
-        /// The <c>Initialize</c> method is called after the constructor but before
-        /// the main game loop. This is where you can query any required services
-        /// and load any non-graphic related content.
+        /// The <c>Initialize</c> method is called after the constructor but before the main game loop.
+        /// This is where you can query any required services and load any non-graphic related content.
         /// </summary>
         protected override void Initialize()
         {
@@ -46,30 +45,33 @@ namespace Arcadia
         }
 
         /// <summary>
-        /// The <c>LoadContent</c> method is used to load your game content. It is
-        /// called only once per game, within the <c>Initialize</c> method, before
-        /// the man game loop starts.
+        /// The <c>LoadContent</c> method is used to load your game content. It is called only
+        /// once per game, within the <c>Initialize</c> method, before the man game loop starts.
         /// </summary>
         protected override void LoadContent()
         {
-            SpriteManager.createInstance(this);
-            _world = new World(69, 4, 4);
+            SpriteManager.CreateInstance(this);
+            _world = new World(69, 200, 150);
 
             // TODO: use this.Content to load your game content here
             _playerTexture = Content.Load<Texture2D>("test/playertest");
             _tileTexture = Content.Load<Texture2D>("test/tiletest");
 
-            _player = new Player(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world);
+            _player = new Player(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world)
+            {
+                Y = 75 * Grid.Size
+            };
+
             _tile = new Dirt(_tileTexture, 0, 0);
-            _world[0, 0] = _tile;
+            _world.Generate(_tileTexture);
+            //_world[0, 0] = _tile;
 
             _camera.Follow(_player);
         }
 
         /// <summary>
-        /// The <c>Update</c> method is called multiple times per second, and it is
-        /// used to update your game state (e.g. checking for collisions, gathering
-        /// input, playing audio).
+        /// The <c>Update</c> method is called multiple times per second, and it is used to update
+        /// your game state (e.g. checking for collisions, gathering input, playing audio).
         /// </summary>
         /// <param name="gameTime"></param>
         protected override void Update(GameTime gameTime)
@@ -78,17 +80,16 @@ namespace Arcadia
             MouseListener.Update();
             _screen.Update();
 
+            _world.Update(gameTime);
             _player.Update(gameTime);
             _camera.Update(gameTime);
-            _world.Update(gameTime);
 
             base.Update(gameTime);
         }
 
         /// <summary>
-        /// Similar to the <c>Update</c> method, the <c>Draw</c> method is also called
-        /// multiple times per second. This, as the name suggests, is responsible for
-        /// drawing content to the screen.
+        /// Similar to the <c>Update</c> method, the <c>Draw</c> method is also called multiple times
+        /// per second. This, as the name suggests, is responsible for drawing content to the screen.
         /// </summary>
         /// <param name="gameTime"></param>
         protected override void Draw(GameTime gameTime)
@@ -97,8 +98,8 @@ namespace Arcadia
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             SpriteManager.Begin(_camera, false);
-            _player.Draw(gameTime);
             _world.Draw(gameTime);
+            _player.Draw(gameTime);
             SpriteManager.End();
 
             _scene.DisableRenderTargeting();
