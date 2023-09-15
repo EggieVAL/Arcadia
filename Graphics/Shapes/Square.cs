@@ -2,8 +2,6 @@
 {
     public class Square : Polygon
     {
-        public override ShapeType ShapeType => ShapeType.Square;
-
         public override float Area => Length * Length;
 
         public float Length { get; set; }

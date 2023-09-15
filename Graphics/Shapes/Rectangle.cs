@@ -2,8 +2,6 @@
 {
     public class Rectangle : Polygon
     {
-        public override ShapeType ShapeType => ShapeType.Rectangle;
-
         public override float Area => Width * Height;
 
         public float Width { get; set; }

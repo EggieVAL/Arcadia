@@ -4,8 +4,6 @@ namespace Arcadia.Graphics.Shapes
 {
     public class SimplePolygon : Polygon
     {
-        public override ShapeType ShapeType => ShapeType.SimplePolygon;
-
         public override float Area
         {
             get

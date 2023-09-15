@@ -1,146 +1,86 @@
 ﻿using Arcadia.GameObject.Tiles;
+using Arcadia.GameWorld.Algorithms;
+using Arcadia.Graphics;
 using Microsoft.Xna.Framework;
-using System;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Arcadia.GameWorld
 {
-    /// <summary>
-    /// The <c>World</c> class is a representation of a game world.
-    /// </summary>
     public class World
     {
-        /// <summary>
-        /// The size of a small world.
-        /// </summary>
-        public static readonly Point Small = new Point(4200, 1200);
+        public static readonly Point Small = new(4200, 1200);
 
-        /// <summary>
-        /// The size of a medium world.
-        /// </summary>
-        public static readonly Point Medium = new Point(6400, 1800);
+        public static readonly Point Medium = new(6400, 1800);
 
-        /// <summary>
-        /// The size of a large world.
-        /// </summary>
-        public static readonly Point Large = new Point(8400, 2400);
+        public static readonly Point Large = new(8400, 2400);
 
-        /// <summary>
-        /// The tile of a game world at (<paramref name="tileX"/>, <paramref name="tileY"/>).
-        /// </summary>
-        /// <param name="tileX">The x-coordinate in the grid space.</param>
-        /// <param name="tileY">The y-coordinate in the grid space.</param>
-        /// <returns></returns>
         public Tile this[int tileX, int tileY]
         {
             get => Grid[tileX, tileY];
             set => Grid[tileX, tileY] = value;
         }
 
-        /// <summary>
-        /// The tile of a game world at (<paramref name="x"/>, <paramref name="y"/>).
-        /// </summary>
-        /// <param name="x">The x-coordinate in units.</param>
-        /// <param name="y">The y-coordinate in units.</param>
-        /// <returns></returns>
-        public Tile this[float x, float y]
-        {
-            get => Grid[x, y];
-            set => Grid[x, y] = value;
-        }
-
-        /// <summary>
-        /// The grid representation of a game world.
-        /// </summary>
         public Grid Grid { get; private set; }
 
-        /// <summary>
-        /// The tile width of the world.
-        /// </summary>
-        public int TileWidth => Grid.TileWidth;
+        public int GridWidth => Grid.GridWidth;
 
-        /// <summary>
-        /// The tile height of the world.
-        /// </summary>
-        public int TileHeight => Grid.TileHeight;
+        public int GridHeight => Grid.GridHeight;
 
-        /// <summary>
-        /// The width of the world in units.
-        /// </summary>
         public float Width => Grid.Width;
 
-        /// <summary>
-        /// The height of the world in units.
-        /// </summary>
         public float Height => Grid.Height;
 
-        /// <summary>
-        /// The seed of a game world.
-        /// </summary>
         public long Seed { get; init; }
 
-        /// <summary>
-        /// Constructs a pseudo-random generated world of some <paramref name="tileWidth"/> and
-        /// <paramref name="tileHeight"/> based on seed.
-        /// </summary>
-        /// <param name="seed">The seed of a world.</param>
-        /// <param name="tileWidth">The tile width of a world.</param>
-        /// <param name="tileHeight">The tile height of a world.</param>
-        public World(long seed, int tileWidth, int tileHeight)
+        public World(long seed, int gridWidth, int gridHeight)
         {
-            Grid = new Grid(tileWidth, tileHeight);
+            Grid = new Grid(gridWidth, gridHeight);
             Seed = seed;
+
+            UniversalRandom.SetSeed(seed);
         }
 
-        /// <summary>
-        /// Constructs a pseudo-random generated world of some <paramref name="width"/> and
-        /// <paramref name="height"/> based on seed.
-        /// </summary>
-        /// <param name="seed">The seed of a world.</param>
-        /// <param name="width">The width of a world in units.</param>
-        /// <param name="height">The height of a world in units.</param>
-        public World(long seed, float width, float height)
+        public void Generate(Texture2D texture)
         {
-            Grid = new Grid(width, height);
-            Seed = seed;
-        }
+            int[,] world = new int[GridWidth, GridHeight];
 
-        /// <summary>
-        /// The update method is called multiple times a second, updating the state of a
-        /// character.
-        /// </summary>
-        /// <param name="gameTime">The time state of the game.</param>
-        public void Update(GameTime gameTime)
-        {
-            for (int tileX = 0; tileX < TileWidth; ++tileX)
+            EmptyArea.Run(world);
+            GenerateTerrain.Run(world, GridHeight/2, (int) Ink.Default);
+            //GenerateCaves.Run(world, 50, 5);
+            //RemoveAirBubbles.Run(world, 15);
+            //RemovePatchesOfBlocks.Run(world, 15);
+
+            for (int gridX = 0; gridX < GridWidth; ++gridX)
             {
-                for (int tileY = 0; tileY < TileHeight; ++tileY)
+                for (int gridY = 0; gridY < GridHeight; ++gridY)
                 {
-                    Tile tile = Grid[tileX, tileY];
-                    if (tile != null)
-                    {
-                        tile.Update(gameTime);
-                    }
+                    int ink = world[gridX, gridY];
+                    Grid[gridX, gridY] = (ink == (int) Ink.Transparent || ink == (int) Ink.Ignore)
+                        ? null : new Dirt(texture, gridX, gridY);
                 }
             }
         }
 
-        /// <summary>
-        /// Similar to the update method, the draw method is also called multiple times per
-        /// second. This, as the name suggests, is responsible for drawing content to the
-        /// screen.
-        /// </summary>
-        /// <param name="gameTime"></param>
-        public void Draw(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
-            for (int tileX = 0; tileX < TileWidth; ++tileX)
+            for (int tileX = 0; tileX < GridWidth; ++tileX)
             {
-                for (int tileY = 0; tileY < TileHeight; ++tileY)
+                for (int tileY = 0; tileY < GridHeight; ++tileY)
                 {
                     Tile tile = Grid[tileX, tileY];
-                    if (tile != null)
-                    {
-                        tile.Draw(gameTime);
-                    }
+                    tile?.Update(gameTime);
+                }
+            }
+        }
+
+        public void Draw(GameTime gameTime)
+        {
+            for (int gridX = 0; gridX < GridWidth; ++gridX)
+            {
+                for (int gridY = 0; gridY < GridHeight; ++gridY)
+                {
+                    Tile tile = Grid[gridX, gridY];
+                    tile?.Draw(gameTime);
                 }
             }
         }

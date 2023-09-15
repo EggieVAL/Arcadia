@@ -2,8 +2,6 @@
 {
     public abstract class Polygon : Shape
     {
-        public abstract ShapeType ShapeType { get; }
-
         public abstract float Area { get; }
 
         public float Perimeter

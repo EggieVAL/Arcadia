@@ -4,8 +4,6 @@ namespace Arcadia.Graphics.Shapes
 {
     public class Circle : Shape
     {
-        public ShapeType ShapeType => ShapeType.Circle;
-
         public float Area => MathF.PI * Radius * Radius;
 
         public float Perimeter => MathF.PI * Diameter;

@@ -4,8 +4,6 @@ namespace Arcadia.Graphics.Shapes
 {
     public class Ellipse : Shape
     {
-        public ShapeType ShapeType => ShapeType.Ellipse;
-
         public float Area => MathF.PI * RadiusX * RadiusY;
 
         public float Perimeter => throw new NotImplementedException();
