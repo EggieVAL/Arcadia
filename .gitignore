@@ -399,8 +399,10 @@ FodyWeavers.xsd
 
 # MonoGame
 .config/
-.csproj
-.sln
+Arcadia.csproj
+Arcadia.sln
+Arcade Stuff.csproj
+Arcade Stuff.sln
 Content/bin
 Content/obj
 Icon.bmp
