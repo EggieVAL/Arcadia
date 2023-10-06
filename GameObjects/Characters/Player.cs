@@ -1,4 +1,5 @@
-﻿using Arcadia.GameWorld;
+﻿using Arcadia.GameObjects.Characters;
+using Arcadia.GameWorld;
 using Arcadia.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,8 +9,12 @@ namespace Arcadia.GameObject.Characters
 {
     public sealed class Player : Character
     {
-        public Player(Texture2D texture, Rectangle bounds, World world) : base(texture, bounds, world)
+        PlayerClass Class { get; set; }
+        CharacterStats Stats { get; set; }
+        public Player(PlayerClass playerClass, Texture2D texture, Rectangle bounds, World world) : base(texture, bounds, world)
         {
+            Class = playerClass;
+            Stats = new CharacterStats(playerClass);
         }
 
         public override void Update(GameTime gameTime)
@@ -19,18 +24,27 @@ namespace Arcadia.GameObject.Characters
 
             if (KeyListener.IsKeyPressed(Keys.A))
             {
-                VelocityX = -0.2f;
+                VelocityX = -0.2f + Stats.AGI * 0.05f;
             }
             if (KeyListener.IsKeyPressed(Keys.D))
             {
-                VelocityX = 0.2f;
+                VelocityX = 0.2f + Stats.AGI * 0.05f;
             }
             if (KeyListener.IsKeyPressed(Keys.LeftShift))
             {
-                VelocityX *= 2;
+                VelocityX *= 2 + Stats.AGI * 0.1f;
             }
+
             
             base.Update(gameTime);
         }
+    }
+
+    public enum PlayerClass
+    {
+        Warrior = 0,
+        Hunter = 1,
+        Rogue = 2,
+        Mage = 3
     }
 }
