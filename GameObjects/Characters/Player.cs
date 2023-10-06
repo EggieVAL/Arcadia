@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Arcadia.GameObject.Characters
+namespace Arcadia.GameObjects.Characters
 {
     public sealed class Player : Character
     {

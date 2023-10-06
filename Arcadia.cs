@@ -1,6 +1,6 @@
-﻿using Arcadia.GameObject;
-using Arcadia.GameObject.Characters;
-using Arcadia.GameObject.Tiles;
+﻿using Arcadia.GameObjects;
+using Arcadia.GameObjects.Characters;
+using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld;
 using Arcadia.Graphics;
 using Arcadia.Input;
@@ -51,7 +51,7 @@ namespace Arcadia
         protected override void LoadContent()
         {
             SpriteManager.CreateInstance(this);
-            _world = new World(69, 200, 150);
+            _world = new World(69, 200, 150, _camera);
 
             // TODO: use this.Content to load your game content here
             _playerTexture = Content.Load<Texture2D>("test/playertest");

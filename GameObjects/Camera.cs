@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 
-namespace Arcadia.GameObject
+namespace Arcadia.GameObjects
 {
     public sealed class Camera : RenderableObject
     {

@@ -1,10 +1,10 @@
-﻿using Arcadia.GameObject.Tiles;
+﻿using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace Arcadia.GameObject.Characters
+namespace Arcadia.GameObjects.Characters
 {
     public abstract class Character : RenderableObject
     {
