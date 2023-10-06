@@ -1,4 +1,4 @@
-﻿using Arcadia.GameObject.Tiles;
+﻿using Arcadia.GameObjects.Tiles;
 using Arcadia.GameObjects.Characters;
 using Arcadia.GameWorld;
 using Arcadia.Input;
@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System;
 using System.Diagnostics;
 
-namespace Arcadia.GameObject.Characters
+namespace Arcadia.GameObjects.Characters
 {
     public sealed class Player : Character
     {
@@ -50,7 +50,6 @@ namespace Arcadia.GameObject.Characters
             {
                 if(grounded)
                 {
-                    Debug.WriteLine(true);
                     VelocityY -= (0.75f + Stats.AGI * 0.1f);
                 }
                 

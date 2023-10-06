@@ -1,4 +1,4 @@
-﻿using Arcadia.GameObject.Characters;
+﻿using Arcadia.GameObjects.Characters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +17,18 @@ namespace Arcadia.GameObjects.Characters
         public int DEX { get; set; }
         public int INT { get; set; }
         public int SLA { get; set; }
+
+        public CharacterStats()
+        {
+            VIT = 5;
+            STR = 5;
+            DEF = 5;
+            MAN = 5;
+            AGI = 5;
+            DEX = 5;
+            INT = 5;
+            SLA = 5;
+        }
 
         public CharacterStats(PlayerClass playerClass)
         {

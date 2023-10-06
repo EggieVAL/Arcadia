@@ -1,6 +1,6 @@
-﻿using Arcadia.GameObject;
-using Arcadia.GameObject.Characters;
-using Arcadia.GameObject.Tiles;
+﻿using Arcadia.GameObjects;
+using Arcadia.GameObjects.Characters;
+using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld;
 using Arcadia.Graphics;
 using Arcadia.Input;

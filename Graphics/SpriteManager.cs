@@ -1,4 +1,4 @@
-﻿using Arcadia.GameObject;
+﻿using Arcadia.GameObjects;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;

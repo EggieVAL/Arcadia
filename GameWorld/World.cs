@@ -1,4 +1,4 @@
-﻿using Arcadia.GameObject.Tiles;
+﻿using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld.Algorithms;
 using Arcadia.Graphics;
 using Microsoft.Xna.Framework;

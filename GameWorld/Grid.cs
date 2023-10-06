@@ -1,4 +1,4 @@
-﻿using Arcadia.GameObject.Tiles;
+﻿using Arcadia.GameObjects.Tiles;
 
 namespace Arcadia.GameWorld
 {

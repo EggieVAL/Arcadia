@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Arcadia.GameObject.Tiles
+namespace Arcadia.GameObjects.Tiles
 {
     public abstract class Tile : RenderableObject
     {

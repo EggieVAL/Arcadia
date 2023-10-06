@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Arcadia.GameObject
+namespace Arcadia.GameObjects
 {
     public abstract class RenderableObject : GameObject
     {
