@@ -4,33 +4,45 @@ using System.Collections.Generic;
 
 namespace Arcadia.GameWorld.Algorithms
 {
+    /// <summary>
+    /// The <see cref="FloodFill"/> class is an algorithm that fills an area connected to the given position.
+    /// </summary>
     public static class FloodFill
     {
-        public static void Run(int[,] area, int gridX, int gridY, int maximumFill, int newInk, Func<int[,], Point, bool> IsCorrectInk)
+        /// <summary>
+        /// Fills in the given <paramref name="area"/> connected to the given position.
+        /// </summary>
+        /// <param name="area">The area to apply the flood fill algorithm.</param>
+        /// <param name="x">The x-coordinate in the grid space.</param>
+        /// <param name="y">The y-coordinate in the grid space.</param>
+        /// <param name="maximumFill">The maximum number of tiles the algorithm will alter.</param>
+        /// <param name="newInk">The ink used for filling.</param>
+        /// <param name="IsCorrectInk">The function used to check if a tile is connected to the given position.</param>
+        public static void Run(int[,] area, int x, int y, int maximumFill, int newInk, Func<int[,], Point, bool> IsCorrectInk)
         {
             List<Point> fillPoints = new();
             List<Point> queue = new();
 
-            Point start = new(gridX, gridY);
-            int currentInk = area[gridX, gridY];
+            Point start = new(x, y);
+            int currentInk = area[x, y];
 
             if (IsCorrectInk(area, start))
             {
-                area[gridX, gridY] = newInk;
+                area[x, y] = newInk;
                 queue.Add(start);
             }
 
             while (queue.Count > 0)
             {
                 int lastIndex = queue.Count - 1;
-                Point gridPosition = queue[lastIndex];
+                Point tilePosition = queue[lastIndex];
                 queue.RemoveAt(lastIndex);
-                fillPoints.Add(gridPosition);
+                fillPoints.Add(tilePosition);
 
-                Point north = new(gridPosition.X, gridPosition.Y-1);
-                Point east = new(gridPosition.X+1, gridPosition.Y);
-                Point south = new(gridPosition.X, gridPosition.Y+1);
-                Point west = new(gridPosition.X-1, gridPosition.Y);
+                Point north = new(tilePosition.X, tilePosition.Y-1);
+                Point east = new(tilePosition.X+1, tilePosition.Y);
+                Point south = new(tilePosition.X, tilePosition.Y+1);
+                Point west = new(tilePosition.X-1, tilePosition.Y);
 
                 if (IsCorrectInk(area, north))
                 {

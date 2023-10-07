@@ -3,22 +3,50 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace Arcadia.GameObject
+namespace Arcadia.GameObjects
 {
+    /// <summary>
+    /// The <see cref="RenderableObject"/> class is an abstraction of a renderable object. A renderable
+    /// object is a game object that can be drawn on the screen.
+    /// </summary>
+    /// <seealso cref="GameObject"/>
     public abstract class RenderableObject : GameObject
     {
+        /// <summary>
+        /// The texture of a renderable object.
+        /// </summary>
         public Texture2D Texture { get; set; }
 
+        /// <summary>
+        /// The x-coordinate of a renderable object in units.
+        /// </summary>
         public float X { get; set; }
 
+        /// <summary>
+        /// The y-coordinate of a renderable object in units.
+        /// </summary>
         public float Y { get; set; }
 
-        public int Width { get; set; }
+        /// <summary>
+        /// The width of a renderable object in units; this is not part of its collider.
+        /// </summary>
+        public float Width { get; set; }
 
-        public int Height { get; set; }
+        /// <summary>
+        /// The height of a renderable object in units; this is not part of its collider.
+        /// </summary>
+        public float Height { get; set; }
 
-        public Rectangle Bounds => new Rectangle((int) MathF.Round(X), (int) MathF.Round(Y), Width, Height);
+        /// <summary>
+        /// The bounds of a renderable object; this is not its collider.
+        /// </summary>
+        public Rectangle Bounds => new((int) MathF.Round(X), (int) MathF.Round(Y), (int) Width, (int) Height);
 
+        /// <summary>
+        /// Constructs a renderable object with a texture.
+        /// </summary>
+        /// <param name="texture">The texture of a renderable object.</param>
+        /// <param name="bounds">The bounds of a renderable object; this is not its collider.</param>
         public RenderableObject(Texture2D texture, Rectangle bounds)
         {
             Texture = texture;
@@ -30,6 +58,10 @@ namespace Arcadia.GameObject
 
         public abstract void Update(GameTime gameTime);
 
+        /// <summary>
+        /// This is a standard draw method for a renderable object.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
         public virtual void Draw(GameTime gameTime)
         {
             if (Texture is not null)
