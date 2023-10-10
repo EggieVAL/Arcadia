@@ -51,13 +51,13 @@ namespace Arcadia
         protected override void LoadContent()
         {
             SpriteManager.CreateInstance(this);
-            _world = new World(69, 200, 150);
+            _world = new World(69, 200, 150, _camera);
 
             // TODO: use this.Content to load your game content here
             _playerTexture = Content.Load<Texture2D>("test/playertest");
             _tileTexture = Content.Load<Texture2D>("test/tiletest");
 
-            _player = new Player(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world)
+            _player = new Player(PlayerClass.Warrior, _playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world)
             {
                 Y = 75 * Grid.Size
             };
