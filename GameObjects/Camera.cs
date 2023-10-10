@@ -11,7 +11,7 @@ namespace Arcadia.GameObjects
     /// The <see cref="Camera"/> class is a representation of a camera. Any object that is being rendered will be displayed
     /// on the camera view.
     /// </summary>
-    public sealed class Camera : RenderableObject
+    public sealed class Camera : GameObject
     {
         /// <summary>
         /// The target to follow.
@@ -49,6 +49,16 @@ namespace Arcadia.GameObjects
         public float HFOV { get; set; }
 
         /// <summary>
+        /// The x-component of the center of the camera.
+        /// </summary>
+        public float X { get; set; }
+
+        /// <summary>
+        /// The y-component of the center of the camera.
+        /// </summary>
+        public float Y { get; set; }
+
+        /// <summary>
         /// The z-coordinate in units.
         /// </summary>
         public float Z
@@ -78,7 +88,7 @@ namespace Arcadia.GameObjects
         /// <param name="scene">The scene.</param>
         /// <param name="x">The x-coordinate in units.</param>
         /// <param name="y">The y-coordinate in units.</param>
-        public Camera(Scene scene, float x, float y) : base(null, new Rectangle((int) x, (int) y, 0, 0))
+        public Camera(Scene scene, float x, float y)
         {
             AspectRatio = (float) scene.Width / scene.Height;
             VFOV = MathHelper.PiOver2;
@@ -86,6 +96,8 @@ namespace Arcadia.GameObjects
 
             MinimumZ = GetZFromWidth(60 * Grid.Size);
             MaximumZ = GetZFromHeight(scene.Height);
+            X = x;
+            Y = y;
             Z = MaximumZ;
             ZoomRate = 0.03f;
 
@@ -104,12 +116,12 @@ namespace Arcadia.GameObjects
         /// camera by following a target.
         /// </summary>
         /// <param name="gameTime">The game time.</param>
-        public override void Update(GameTime gameTime)
+        public void Update(GameTime gameTime)
         {
             if (Target is not null)
             {
-                X = Target.X - Target.Width / 2;
-                Y = Target.Y - Target.Height / 2;
+                X = Target.X + Target.Width * 0.5f;
+                Y = Target.Y + Target.Height * 0.5f;
             }
 
             if (KeyListener.IsKeyPressed(Keys.OemPlus))
@@ -162,9 +174,9 @@ namespace Arcadia.GameObjects
         public void GetExtents(out float left, out float right, out float top, out float bottom)
         {
             GetExtents(out float width, out float height);
-            left = X;
+            left = X - width * 0.5f;
             right = left + width;
-            top = Y;
+            top = Y - height * 0.5f;
             bottom = top + height;
         }
 

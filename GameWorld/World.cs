@@ -76,7 +76,7 @@ namespace Arcadia.GameWorld
         /// <param name="seed">The seed of the world.</param>
         /// <param name="width">The width of the world in terms of tiles.</param>
         /// <param name="height">The height of the world in terms of tiles.</param>
-        public World(long seed, int gridWidth, int gridHeight, Camera camera)
+        public World(long seed, int width, int height, Camera camera)
         {
             Grid = new Grid(width, height);
             Seed = seed;
