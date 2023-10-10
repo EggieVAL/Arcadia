@@ -2,8 +2,15 @@
 
 namespace Arcadia.Graphics.Shapes
 {
+    /// <summary>
+    /// The <see cref="SimplePolygon"/> class is a representation of a simple polygon. A simple polygon must not have any edges intersecting
+    /// with another edge.
+    /// </summary>
     public class SimplePolygon : Polygon
     {
+        /// <summary>
+        /// The area of a simple polygon.
+        /// </summary>
         public override float Area
         {
             get
@@ -19,6 +26,10 @@ namespace Arcadia.Graphics.Shapes
             }
         }
 
+        /// <summary>
+        /// Constructs a simple polygon with the given vertices.
+        /// </summary>
+        /// <param name="vertices"></param>
         public SimplePolygon(Vertex[] vertices) : base(vertices) { }
     }
 }

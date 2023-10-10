@@ -4,8 +4,16 @@ using System.Drawing;
 
 namespace Arcadia.GameWorld.Algorithms
 {
+    /// <summary>
+    /// The <see cref="GenerateShape"/> class is an algorithm that generates a shape.
+    /// </summary>
     public static class GenerateShape
     {
+        /// <summary>
+        /// Generates a <paramref name="shape"/> as an <paramref name="area"/>.
+        /// </summary>
+        /// <param name="area">The shape in the form of a 2D integer array.</param>
+        /// <param name="shape">The shape to generate.</param>
         public static void Run(out int[,] area, Shape shape)
         {
             area = null;

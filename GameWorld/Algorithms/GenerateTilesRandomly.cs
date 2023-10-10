@@ -2,8 +2,18 @@
 
 namespace Arcadia.GameWorld.Algorithms
 {
+    /// <summary>
+    /// The <see cref="GenerateTilesRandomly"/> class is an algorithm that generates tiles randomly using a brush.
+    /// </summary>
+    /// <seealso cref="Brush"/>
     public static class GenerateTilesRandomly
     {
+        /// <summary>
+        /// Generates tiles randomly in the given <paramref name="area"/> using the given <paramref name="brush"/>.
+        /// </summary>
+        /// <param name="area">The area to generate tiles in.</param>
+        /// <param name="density">The density affects the frequency of generated tiles.</param>
+        /// <param name="brush">The brush used for generating tiles.</param>
         public static void Run(int[,] area, int density, Brush brush)
         {
             for (int x = 0; x < area.GetLength(0); ++x)

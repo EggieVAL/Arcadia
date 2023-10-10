@@ -1,7 +1,11 @@
 ﻿namespace Arcadia.GameWorld.Algorithms
 {
+    /// <summary>
+    /// The <see cref="GenerateTerrain"/> class is an algorithm that generates terrain in an area.
+    /// </summary>
     public static class GenerateTerrain
     {
+        // This is prone to change; not finalized.
         public static void Run(int[,] area, int heightLevel, int ink)
         {
             int width = area.GetLength(0);

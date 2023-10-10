@@ -6,26 +6,68 @@ using System.Collections.Generic;
 
 namespace Arcadia.GameObjects.Characters
 {
+    /// <summary>
+    /// The <see cref="Character"/> class is an abstraction of a game character. A character can be a player,
+    /// an NPC, a mob, or a critter.
+    /// </summary>
     public abstract class Character : RenderableObject
     {
+        /// <summary>
+        /// The world a character is in.
+        /// </summary>
         public World World { get; set; }
 
+        /// <summary>
+        /// The x-component of velocity of a character.
+        /// </summary>
         public float VelocityX { get; set; }
 
+        /// <summary>
+        /// The y-component of velocity of a character.
+        /// </summary>
         public float VelocityY { get; set; }
 
+        /// <summary>
+        /// Is the character falling?
+        /// </summary>
         public bool IsFalling => VelocityY > 0;
 
+        /// <summary>
+        /// Is the character rising (moving upwards)?
+        /// </summary>
         public bool IsRising => VelocityY < 0;
 
+        /// <summary>
+        /// Is the character moving left?
+        /// </summary>
         public bool IsMovingLeft => VelocityX < 0;
 
+        /// <summary>
+        /// Is the character moving right?
+        /// </summary>
         public bool IsMovingRight => VelocityX > 0;
 
+        /// <summary>
+        /// Is the character moving horizontally?
+        /// </summary>
         public bool IsMovingHorizontally => VelocityX != 0;
 
+        /// <summary>
+        /// Is the character moving vertically?
+        /// </summary>
         public bool IsMovingVertically => VelocityY != 0;
 
+        /// <summary>
+        /// Is the character moving?
+        /// </summary>
+        public bool IsMoving => IsMovingHorizontally || IsMovingVertically;
+
+        /// <summary>
+        /// Constructs a character in a world at the given bounds.
+        /// </summary>
+        /// <param name="texture">The texture of a character.</param>
+        /// <param name="bounds">The bounds of a character.</param>
+        /// <param name="world">The world a character is in.</param>
         public Character(Texture2D texture, Rectangle bounds, World world) : base(texture, bounds)
         {
             VelocityX = 0;
@@ -33,6 +75,10 @@ namespace Arcadia.GameObjects.Characters
             World = world;
         }
 
+        /// <summary>
+        /// Updates a character's collision state.
+        /// </summary>
+        /// <param name="gameTime">The game time.</param>
         public override void Update(GameTime gameTime)
         {
             float elapsedTime = gameTime.ElapsedGameTime.Milliseconds;
@@ -50,16 +96,23 @@ namespace Arcadia.GameObjects.Characters
                 handleTopCollision(tilesCollided);
             }
 
-            if (IsCollidingOnTheLeft(currentX, nextX, out tilesCollided))
+            if (IsCollidingToTheLeft(currentX, nextX, out tilesCollided))
             {
                 handleLeftCollision(tilesCollided);
             }
-            else if (IsCollidingOnTheRight(currentX, nextX, out tilesCollided))
+            else if (IsCollidingToTheRight(currentX, nextX, out tilesCollided))
             {
                 handleRightCollision(tilesCollided);
             }
         }
         
+        /// <summary>
+        /// Is a character colliding with any tiles above it?
+        /// </summary>
+        /// <param name="currentY">The current y-coordinate of a character.</param>
+        /// <param name="nextY">The next y-coordinate of a character after moving.</param>
+        /// <param name="tilesCollided">The tiles a character collided with.</param>
+        /// <returns>Returns true if a character collides with at least one tile.</returns>
         public bool IsCollidingAbove(float currentY, float nextY, out List<Tile> tilesCollided)
         {
             tilesCollided = new List<Tile>();
@@ -68,16 +121,16 @@ namespace Arcadia.GameObjects.Characters
                 return false;
             }
 
-            int lowerGridX = Grid.GetPosition(X);
-            int upperGridX = Grid.GetPosition(X + Width - 0.01f);
-            int lowerGridY = Grid.GetPosition(currentY);
-            int upperGridY = MathHelper.Clamp(Grid.GetPosition(nextY), 0, World.GridHeight);
+            int lowerTileX = Grid.GetPosition(X);
+            int upperTileX = Grid.GetPosition(X + Width - 0.01f);
+            int lowerTileY = Grid.GetPosition(currentY);
+            int upperTileY = MathHelper.Clamp(Grid.GetPosition(nextY), 0, World.Height);
 
-            for (int gridY = lowerGridY; gridY >= upperGridY; --gridY)
+            for (int tileY = lowerTileY; tileY >= upperTileY; --tileY)
             {
-                for (int gridX = lowerGridX; gridX <= upperGridX; ++gridX)
+                for (int tileX = lowerTileX; tileX <= upperTileX; ++tileX)
                 {
-                    Tile tile = World[gridX, gridY];
+                    Tile tile = World[tileX, tileY];
                     if (tile is not null)
                     {
                         tilesCollided.Add(tile);
@@ -98,6 +151,13 @@ namespace Arcadia.GameObjects.Characters
             return false;
         }
 
+        /// <summary>
+        /// Is a character colliding with any tiles below it?
+        /// </summary>
+        /// <param name="currentY">The current y-coordinate of a character.</param>
+        /// <param name="nextY">The next y-coordinate of a character after moving.</param>
+        /// <param name="tilesCollided">The tiles a character collided with.</param>
+        /// <returns>Returns true if a character collides with at least one tile.</returns>
         public bool IsCollidingBelow(float currentY, float nextY, out List<Tile> tilesCollided)
         {
             tilesCollided = new List<Tile>();
@@ -109,16 +169,16 @@ namespace Arcadia.GameObjects.Characters
             currentY += Height;
             nextY += Height;
 
-            int lowerGridX = Grid.GetPosition(X);
-            int upperGridX = Grid.GetPosition(X + Width - 0.01f);
-            int lowerGridY = Grid.GetPosition(currentY);
-            int upperGridY = MathHelper.Clamp(Grid.GetPosition(nextY), 0, World.GridHeight);
+            int lowerTileX = Grid.GetPosition(X);
+            int upperTileX = Grid.GetPosition(X + Width - 0.01f);
+            int lowerTileY = Grid.GetPosition(currentY);
+            int upperTileY = MathHelper.Clamp(Grid.GetPosition(nextY), 0, World.Height);
 
-            for (int gridY = lowerGridY; gridY <= upperGridY; ++gridY)
+            for (int tileY = lowerTileY; tileY <= upperTileY; ++tileY)
             {
-                for (int gridX = lowerGridX; gridX <= upperGridX; ++gridX)
+                for (int tileX = lowerTileX; tileX <= upperTileX; ++tileX)
                 {
-                    Tile tile = World[gridX, gridY];
+                    Tile tile = World[tileX, tileY];
                     if (tile is not null)
                     {
                         tilesCollided.Add(tile);
@@ -130,16 +190,23 @@ namespace Arcadia.GameObjects.Characters
                 }
             }
 
-            if (nextY > World.Height)
+            if (nextY > World.HeightInUnits)
             {
-                Y = World.Height - Height;
+                Y = World.HeightInUnits - Height;
                 VelocityY = 0;
                 return true;
             }
             return false;
         }
 
-        public bool IsCollidingOnTheLeft(float currentX, float nextX, out List<Tile> tilesCollided)
+        /// <summary>
+        /// Is a character colliding with any tiles to the left of it?
+        /// </summary>
+        /// <param name="currentX">The current x-coordinate of a character.</param>
+        /// <param name="nextX">The next x-coordinate of a character after moving.</param>
+        /// <param name="tilesCollided">The tiles a character collided with.</param>
+        /// <returns>Returns true if a character collides with at least one tile.</returns>
+        public bool IsCollidingToTheLeft(float currentX, float nextX, out List<Tile> tilesCollided)
         {
             tilesCollided = new List<Tile>();
             if (IsMovingRight || !IsMovingHorizontally)
@@ -147,16 +214,16 @@ namespace Arcadia.GameObjects.Characters
                 return false;
             }
 
-            int lowerGridX = Grid.GetPosition(currentX);
-            int upperGridX = MathHelper.Clamp(Grid.GetPosition(nextX), 0, World.GridWidth);
-            int lowerGridY = Grid.GetPosition(Y);
-            int upperGridY = Grid.GetPosition(Y + Height - 0.01f);
+            int lowerTileX = Grid.GetPosition(currentX);
+            int upperTileX = MathHelper.Clamp(Grid.GetPosition(nextX), 0, World.Width);
+            int lowerTileY = Grid.GetPosition(Y);
+            int upperTileY = Grid.GetPosition(Y + Height - 0.01f);
 
-            for (int gridX = lowerGridX; gridX >= upperGridX; --gridX)
+            for (int tileX = lowerTileX; tileX >= upperTileX; --tileX)
             {
-                for (int gridY = lowerGridY; gridY <= upperGridY; ++gridY)
+                for (int tileY = lowerTileY; tileY <= upperTileY; ++tileY)
                 {
-                    Tile tile = World[gridX, gridY];
+                    Tile tile = World[tileX, tileY];
                     if (tile is not null)
                     {
                         tilesCollided.Add(tile);
@@ -176,7 +243,14 @@ namespace Arcadia.GameObjects.Characters
             return false;
         }
 
-        public bool IsCollidingOnTheRight(float currentX, float nextX, out List<Tile> tilesCollided)
+        /// <summary>
+        /// Is a character colliding with any tiles to the right of it?
+        /// </summary>
+        /// <param name="currentX">The current x-coordinate of a character.</param>
+        /// <param name="nextX">The next x-coordinate of a character after moving.</param>
+        /// <param name="tilesCollided">The tiles a character collided with.</param>
+        /// <returns>Returns true if a character collides with at least one tile.</returns>
+        public bool IsCollidingToTheRight(float currentX, float nextX, out List<Tile> tilesCollided)
         {
             tilesCollided = new List<Tile>();
             if (IsMovingLeft || !IsMovingHorizontally)
@@ -187,16 +261,16 @@ namespace Arcadia.GameObjects.Characters
             currentX += Width;
             nextX += Width;
 
-            int lowerGridX = Grid.GetPosition(currentX);
-            int upperGridX = MathHelper.Clamp(Grid.GetPosition(nextX), 0, World.GridWidth);
-            int lowerGridY = Grid.GetPosition(Y);
-            int upperGridY = Grid.GetPosition(Y + Height - 0.01f);
+            int lowerTileX = Grid.GetPosition(currentX);
+            int upperTileX = MathHelper.Clamp(Grid.GetPosition(nextX), 0, World.Width);
+            int lowerTileY = Grid.GetPosition(Y);
+            int upperTileY = Grid.GetPosition(Y + Height - 0.01f);
 
-            for (int gridX = lowerGridX; gridX <= upperGridX; ++gridX)
+            for (int tileX = lowerTileX; tileX <= upperTileX; ++tileX)
             {
-                for (int gridY = lowerGridY; gridY <= upperGridY; ++gridY)
+                for (int tileY = lowerTileY; tileY <= upperTileY; ++tileY)
                 {
-                    Tile tile = World[gridX, gridY];
+                    Tile tile = World[tileX, tileY];
                     if (tile is not null)
                     {
                         tilesCollided.Add(tile);
@@ -208,9 +282,9 @@ namespace Arcadia.GameObjects.Characters
                 }
             }
 
-            if (nextX > World.Width)
+            if (nextX > World.WidthInUnits)
             {
-                X = World.Width - Width;
+                X = World.WidthInUnits - Width;
                 return true;
             }
             return false;
@@ -248,14 +322,14 @@ namespace Arcadia.GameObjects.Characters
             float positionY = Y + Height;
             float lowerBoundY = tilesCollided[0].Y;
             float upperBoundY = lowerBoundY + Grid.Size * 0.6f;
-            float gridY = lowerBoundY + Grid.Size;
+            float tileY = lowerBoundY + Grid.Size;
 
             if (positionY >= lowerBoundY && positionY <= upperBoundY)
             {
                 Y = lowerBoundY - Height;
                 VelocityY = 0;
             }
-            else if (VelocityY == 0 && positionY == gridY)
+            else if (VelocityY == 0 && positionY == tileY)
             {
                 Y -= Grid.Size;
             }
@@ -276,14 +350,14 @@ namespace Arcadia.GameObjects.Characters
             float positionY = Y + Height;
             float lowerBoundY = tilesCollided[0].Y;
             float upperBoundY = lowerBoundY + Grid.Size * 0.6f;
-            float gridY = lowerBoundY + Grid.Size;
+            float tileY = lowerBoundY + Grid.Size;
 
             if (positionY >= lowerBoundY && positionY <= upperBoundY)
             {
                 Y = lowerBoundY - Height;
                 VelocityY = 0;
             }
-            else if (VelocityY == 0 && positionY == gridY)
+            else if (VelocityY == 0 && positionY == tileY)
             {
                 Y -= Grid.Size;
             }

@@ -4,20 +4,30 @@ using System;
 
 namespace Arcadia.GameWorld.Algorithms
 {
+    /// <summary>
+    /// The <see cref="RemoveAirBubbles"/> class is an algorithm that removes air bubbles in an area. Air bubbles are pockets
+    /// of air that were formed from running generational algorithms. These air bubbles may be unnatural and unwanted.
+    /// </summary>
     public static class RemoveAirBubbles
     {
-        public static void Run(int[,] area, int minimumAirNeeded, int ink = (int) Ink.Default)
+        /// <summary>
+        /// Removes air bubbles in the given <paramref name="area"/>.
+        /// </summary>
+        /// <param name="area">The area to remove air bubbles in.</param>
+        /// <param name="maximumAir">Any connected area of air greater than this value will not be considered an air bubble.</param>
+        /// <param name="ink">The ink used for filling air bubbles.</param>
+        public static void Run(int[,] area, int maximumAir, int ink = (int) Ink.Default)
         {
             if (ink == (int) Ink.Transparent)
             {
-                throw new ArgumentException("Ink cannot be transparent.");
+                return;
             }
 
             for (int x = 0; x < area.GetLength(0); ++x)
             {
                 for (int y = 0; y < area.GetLength(1); ++y)
                 {
-                    FloodFill.Run(area, x, y, minimumAirNeeded-1, ink, IsAir);
+                    FloodFill.Run(area, x, y, maximumAir, ink, IsAir);
                 }
             }
         }

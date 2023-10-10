@@ -12,16 +12,30 @@ using System.Diagnostics;
 
 namespace Arcadia.GameObjects.Characters
 {
+    /// <summary>
+    /// The <see cref="Player"/> class is a representation of a player. A player is a controllable character that can interact
+    /// with a world it is in.
+    /// </summary>
     public sealed class Player : Character
     {
         PlayerClass Class { get; set; }
         CharacterStats Stats { get; set; }
+        /// <summary>
+        /// Constructs a player.
+        /// </summary>
+        /// <param name="texture">The texture of a player.</param>
+        /// <param name="bounds">The bounds of a player.</param>
+        /// <param name="world">The world a player is in.</param>
         public Player(PlayerClass playerClass, Texture2D texture, Rectangle bounds, World world) : base(texture, bounds, world)
         {
             Class = playerClass;
             Stats = new CharacterStats(playerClass);
         }
 
+        /// <summary>
+        /// Updates the player's movements based on keyboard inputs.
+        /// </summary>
+        /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
             float elapsedTime = gameTime.ElapsedGameTime.Milliseconds;

@@ -5,10 +5,20 @@ using System;
 
 namespace Arcadia.Graphics
 {
+    /// <summary>
+    /// The <see cref="SpriteManager"/> is a singleton class that manages sprites.
+    /// </summary>
     public sealed class SpriteManager : IDisposable
     {
+        /// <summary>
+        /// The single instance of this class.
+        /// </summary>
         public static SpriteManager Instance { get; private set; }
 
+        /// <summary>
+        /// Creates a single instance of this class if it's not already created.
+        /// </summary>
+        /// <param name="game"></param>
         public static void CreateInstance(Game game)
         {
             Instance ??= new SpriteManager(game);

@@ -73,7 +73,7 @@ namespace Arcadia
         /// The <c>Update</c> method is called multiple times per second, and it is used to update
         /// your game state (e.g. checking for collisions, gathering input, playing audio).
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">The game time.</param>
         protected override void Update(GameTime gameTime)
         {
             KeyListener.Update();
@@ -91,7 +91,7 @@ namespace Arcadia
         /// Similar to the <c>Update</c> method, the <c>Draw</c> method is also called multiple times
         /// per second. This, as the name suggests, is responsible for drawing content to the screen.
         /// </summary>
-        /// <param name="gameTime"></param>
+        /// <param name="gameTime">The game time.</param>
         protected override void Draw(GameTime gameTime)
         {
             _scene.EnableRenderTargeting();
@@ -107,7 +107,7 @@ namespace Arcadia
             base.Draw(gameTime);
         }
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             using var game = new Arcadia();
             game.Run();

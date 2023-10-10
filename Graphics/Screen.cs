@@ -5,18 +5,36 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Arcadia.Graphics
 {
+    /// <summary>
+    /// The <see cref="Screen"/> class manages screen-related activities. This class mainly tracks keyboard inputs requesting a screen mode
+    /// change, such as windowed, fullscreen, borderless fullscreen mode.
+    /// </summary>
     public sealed class Screen
     {
+        /// <summary>
+        /// Is the screen in fullscreen mode?
+        /// </summary>
         public bool IsFullScreen { get; private set; }
 
+        /// <summary>
+        /// Is the screen in fullscreen borderless mode?
+        /// </summary>
         public bool IsBorderless { get; private set; }
 
+        /// <summary>
+        /// Constructs a screen that manages the application's screen.
+        /// </summary>
+        /// <param name="graphics">The graphics device manager.</param>
+        /// <param name="window">The game window.</param>
         public Screen(GraphicsDeviceManager graphics, GameWindow window)
         {
             _graphics = graphics;
             _window = window;
         }
-
+        
+        /// <summary>
+        /// Updates the screen mode (i.e. windowed, fullscreen, borderless fullscreen) based on keyboard inputs.
+        /// </summary>
         public void Update()
         {
             if (KeyListener.IsKeyClicked(Keys.F11))
@@ -32,6 +50,9 @@ namespace Arcadia.Graphics
             }
         }
 
+        /// <summary>
+        /// Toggles fullscreen.
+        /// </summary>
         public void ToggleFullScreen()
         {
             bool wasFullScreen = IsFullScreen;
@@ -46,6 +67,9 @@ namespace Arcadia.Graphics
             ApplyFullScreenChanges(wasFullScreen);
         }
 
+        /// <summary>
+        /// Toggles borderless fullscreen.
+        /// </summary>
         public void ToggleBorderless()
         {
             bool wasFullScreen = IsFullScreen;

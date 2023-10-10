@@ -3,8 +3,17 @@ using Microsoft.Xna.Framework;
 
 namespace Arcadia.GameWorld.Algorithms
 {
+    /// <summary>
+    /// The <see cref="GenerateCaves"/> class is an algorithm that generate caves.
+    /// </summary>
     public static class GenerateCaves
     {
+        /// <summary>
+        /// Generates caves in the given <paramref name="area"/>.
+        /// </summary>
+        /// <param name="area">The area to generate caves in.</param>
+        /// <param name="density">The density affects the size of the caves.</param>
+        /// <param name="smoothRate">The smooth rate affects the roughness of the caves.</param>
         public static void Run(int[,] area, int density, int smoothRate)
         {
             GenerateTilesRandomly.Run(area, density, new Brush((int) Ink.Transparent));

@@ -4,23 +4,51 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Arcadia.GameObjects.Tiles
 {
+    /// <summary>
+    /// The <see cref="Tile"/> class is an abstraction of a game tile. A tile has a unique id, or an ink value.
+    /// For example, all dirt tiles have an ink value of 1.
+    /// </summary>
     public abstract class Tile : RenderableObject
     {
-        public bool Breakable { get; protected set; }
+        /// <summary>
+        /// Is the tile breakable?
+        /// </summary>
+        public bool IsBreakable { get; protected set; }
 
-        public bool HasHitbox { get; protected set; }
+        /// <summary>
+        /// Does the tile have a hitbox?
+        /// </summary>
+        public bool HasHitbox { get; set; }
 
+        /// <summary>
+        /// The hardness value of a tile.
+        /// </summary>
         public int Hardness { get; protected set; }
 
+        /// <summary>
+        /// The ink value of a tile. A specific tile can be referenced by its ink value. For example,
+        /// all dirt tiles have an ink value of 1.
+        /// </summary>
         public int Ink { get; init; }
 
-        public Tile(Texture2D texture, int gridX, int gridY) : base(texture, GetBounds(gridX, gridY))
+        /// <summary>
+        /// Constructs a tile at a position in the grid space.
+        /// </summary>
+        /// <param name="texture">The texture of a tile.</param>
+        /// <param name="tileX">The x-coordinate in the grid space.</param>
+        /// <param name="tileY">The y-coordinate in the grid space.</param>
+        public Tile(Texture2D texture, int tileX, int tileY) : base(texture, GetBounds(tileX, tileY))
         {
-            Breakable = true;
-            HasHitbox = true;
+            IsBreakable = true;
             Hardness = 0;
         }
 
+        /// <summary>
+        /// Gets the bounds of a tile at a position.
+        /// </summary>
+        /// <param name="gridX">the x-coordinate in the grid space.</param>
+        /// <param name="gridY">The y-coordinate in the grid space.</param>
+        /// <returns>Returns the bounds of a tile at a position.</returns>
         public static Rectangle GetBounds(int gridX, int gridY)
         {
             return new Rectangle(Grid.ConvertToUnits(gridX), Grid.ConvertToUnits(gridY), Grid.Size, Grid.Size);
