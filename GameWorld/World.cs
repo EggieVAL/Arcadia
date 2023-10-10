@@ -1,8 +1,10 @@
-﻿using Arcadia.GameObjects.Tiles;
+﻿using Arcadia.GameObjects;
+using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld.Algorithms;
 using Arcadia.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Threading;
 
 namespace Arcadia.GameWorld
 {
@@ -32,10 +34,11 @@ namespace Arcadia.GameWorld
 
         public long Seed { get; init; }
 
-        public World(long seed, int gridWidth, int gridHeight)
+        public World(long seed, int gridWidth, int gridHeight, Camera camera)
         {
             Grid = new Grid(gridWidth, gridHeight);
             Seed = seed;
+            _camera = camera;
 
             UniversalRandom.SetSeed(seed);
         }
@@ -75,14 +78,21 @@ namespace Arcadia.GameWorld
 
         public void Draw(GameTime gameTime)
         {
-            for (int gridX = 0; gridX < GridWidth; ++gridX)
+            _camera.GetExtents(out float left, out float right, out float top, out float bottom);
+
+            int[] minPos = Grid.GetPosition(left, top);
+            int[] maxPos = Grid.GetPosition(right, bottom);
+           
+            for (int tileX = minPos[0]; tileX <= maxPos[0]; ++tileX)
             {
-                for (int gridY = 0; gridY < GridHeight; ++gridY)
+                for (int tileY = minPos[1]; tileY <= maxPos[1]; ++tileY)
                 {
-                    Tile tile = Grid[gridX, gridY];
+                    Tile tile = Grid[tileX, tileY];
                     tile?.Draw(gameTime);
                 }
             }
         }
+
+        private Camera _camera;
     }
 }
