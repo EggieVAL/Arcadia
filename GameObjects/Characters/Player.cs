@@ -18,6 +18,9 @@ namespace Arcadia.GameObjects.Characters
         PlayerClass _class { get; set; }
         CharacterStats _stats { get; set; }
 
+        float abilityCooldown;
+        float abilityCooldownTimer;
+
         World _world;
         /// <summary>
         /// Constructs a player.
@@ -30,6 +33,9 @@ namespace Arcadia.GameObjects.Characters
             _class = playerClass;
             _stats = new CharacterStats(playerClass);
             _world = world;
+
+            abilityCooldown = 1;
+            abilityCooldownTimer = abilityCooldown;
         }
 
         /// <summary>
@@ -38,7 +44,7 @@ namespace Arcadia.GameObjects.Characters
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            float elapsedTime = gameTime.ElapsedGameTime.Milliseconds;
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             float currentX = X;
             float currentY = Y;
             float nextX = (X += VelocityX * elapsedTime);
@@ -46,6 +52,12 @@ namespace Arcadia.GameObjects.Characters
             
             VelocityX = 0f;
             VelocityY += 0.0015265f * Grid.Size;
+
+            if(abilityCooldownTimer > 0)
+            {
+                abilityCooldownTimer -= elapsedTime;
+            }
+            
 
             if (KeyListener.IsKeyPressed(Keys.A))
             {
@@ -62,15 +74,16 @@ namespace Arcadia.GameObjects.Characters
 
             if (KeyListener.IsKeyPressed(Keys.E))
             {
-                MouseState ms = Mouse.GetState();
+                if(abilityCooldownTimer <= 0)
+                {
+                    Vector2 worldPos = _world.GetMousePosition();
+                    Vector2 dir = new Vector2(worldPos.X - this.X, worldPos.Y - this.Y);
 
-                //Vector2 worldPos = _world.ScreenToWorld(new Vector2(ms.X, ms.Y));
-                //Debug.WriteLine(worldPos + ", " + "{" + this.X + ", " + this.Y + "}");
-                //float dir_x = worldPos.X - this.X;
-                //float dir_y = worldPos.Y - this.Y;
-                
-                //_world.CreateProjectile(0, (int)X, (int)(Y - 2), dir_x, dir_y);
+                    dir.Normalize();
 
+                    _world.CreateProjectile(0, (int)X, (int)(Y - 2), dir.X*3, dir.Y * 3);
+                    abilityCooldownTimer = abilityCooldown;
+                }
             }
 
             bool grounded = IsCollidingBelow(currentY, nextY, out List<Tile> tilesCollided);

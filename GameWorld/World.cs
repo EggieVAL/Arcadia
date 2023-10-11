@@ -6,7 +6,6 @@ using Arcadia.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 
 namespace Arcadia.GameWorld
@@ -107,13 +106,13 @@ namespace Arcadia.GameWorld
             //RemoveAirBubbles.Run(world, 15);
             //RemovePatchesOfBlocks.Run(world, 15);
 
-            for (int gridX = 0; gridX < Width; ++gridX)
+            for (int tileX = 0; tileX < Width; ++tileX)
             {
-                for (int gridY = 0; gridY < Height; ++gridY)
+                for (int tileY = 0; tileY < Height; ++tileY)
                 {
-                    int ink = world[gridX, gridY];
-                    Grid[gridX, gridY] = (ink == (int) Ink.Transparent || ink == (int) Ink.Ignore)
-                        ? null : new Dirt(texture, gridX, gridY);
+                    int ink = world[tileX, tileY];
+                    Grid[tileX, tileY] = (ink == (int) Ink.Transparent || ink == (int) Ink.Ignore)
+                        ? null : new Dirt(texture, tileX, tileY);
                 }
             }
         }
@@ -123,13 +122,10 @@ namespace Arcadia.GameWorld
             _entities.Add(new Projectile(_miscEntityTextures[me_id], new Rectangle(0,0,2*Grid.Size,1 * Grid.Size), X,Y, VelocityX, VelocityY, this));
         }
 
-        public void GetMousePosition()
+        public Vector2 GetMousePosition()
         {
-            MouseListener.PositionRelativeToCamera(camera, out float x, out float y);
-
-            // convert units into grid coordinates
-            int tileX = Grid.GetPosition(x);
-            int tileY = Grid.GetPosition(y);
+            MouseListener.PositionRelativeToCamera(_camera, out float x, out float y);
+            return new Vector2(x, y);
         }
 
         // currently updates all tiles in the world; may be prone to change

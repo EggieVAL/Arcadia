@@ -14,6 +14,11 @@ namespace Arcadia.GameObjects
     public sealed class Camera : GameObject
     {
         /// <summary>
+        /// The scene of a camera.
+        /// </summary>
+        public Scene Scene { get; init; }
+
+        /// <summary>
         /// The target to follow.
         /// </summary>
         public RenderableObject Target { get; private set; }
@@ -101,6 +106,7 @@ namespace Arcadia.GameObjects
             Z = MaximumZ;
             ZoomRate = 0.03f;
 
+            Scene = scene;
             Target = null;
             UpdateMatrices();
         }

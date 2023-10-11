@@ -79,10 +79,7 @@ namespace Arcadia.GameObjects
             float nextX = (X += VelocityX * elapsedTime);
             float nextY = (Y += VelocityY * elapsedTime);
 
-            if (VelocityY < 0.0015265f * Grid.Size)
-            {
-                VelocityY += 0.0015265f * Grid.Size;
-            }
+            VelocityY += 0.0015265f * Grid.Size;
 
             if (IsCollidingBelow(currentY, nextY, out List<Tile> tilesCollided))
             {
@@ -287,7 +284,8 @@ namespace Arcadia.GameObjects
                 return;
             }
 
-            VelocityY = 0.0000000001f;
+            VelocityY = 0f;
+            VelocityX = 0;
             Y = tilesCollided[0].Y + Grid.Size;
         }
 
@@ -299,6 +297,7 @@ namespace Arcadia.GameObjects
             }
 
             VelocityY = 0;
+            VelocityX = 0;
             Y = tilesCollided[0].Y - Height;
         }
 
