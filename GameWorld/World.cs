@@ -4,7 +4,6 @@ using Arcadia.GameWorld.Algorithms;
 using Arcadia.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Threading;
 
 namespace Arcadia.GameWorld
 {
@@ -96,13 +95,13 @@ namespace Arcadia.GameWorld
             //RemoveAirBubbles.Run(world, 15);
             //RemovePatchesOfBlocks.Run(world, 15);
 
-            for (int gridX = 0; gridX < Width; ++gridX)
+            for (int tileX = 0; tileX < Width; ++tileX)
             {
-                for (int gridY = 0; gridY < Height; ++gridY)
+                for (int tileY = 0; tileY < Height; ++tileY)
                 {
-                    int ink = world[gridX, gridY];
-                    Grid[gridX, gridY] = (ink == (int) Ink.Transparent || ink == (int) Ink.Ignore)
-                        ? null : new Dirt(texture, gridX, gridY);
+                    int ink = world[tileX, tileY];
+                    Grid[tileX, tileY] = (ink == (int) Ink.Transparent || ink == (int) Ink.Ignore)
+                        ? null : new Dirt(texture, tileX, tileY);
                 }
             }
         }
