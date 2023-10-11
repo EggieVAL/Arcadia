@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Arcadia.GameObjects.Characters
 {
@@ -14,18 +15,21 @@ namespace Arcadia.GameObjects.Characters
     /// </summary>
     public sealed class Player : Character
     {
-        PlayerClass Class { get; set; }
-        CharacterStats Stats { get; set; }
+        PlayerClass _class { get; set; }
+        CharacterStats _stats { get; set; }
+
+        World _world;
         /// <summary>
         /// Constructs a player.
         /// </summary>
         /// <param name="texture">The texture of a player.</param>
         /// <param name="bounds">The bounds of a player.</param>
         /// <param name="world">The world a player is in.</param>
-        public Player(PlayerClass playerClass, Texture2D texture, Rectangle bounds, World world) : base(texture, bounds, world)
+        public Player(PlayerClass playerClass, Texture2D[] texture, Rectangle bounds, World world) : base(texture, bounds, world)
         {
-            Class = playerClass;
-            Stats = new CharacterStats(playerClass);
+            _class = playerClass;
+            _stats = new CharacterStats(playerClass);
+            _world = world;
         }
 
         /// <summary>
@@ -39,33 +43,46 @@ namespace Arcadia.GameObjects.Characters
             float currentY = Y;
             float nextX = (X += VelocityX * elapsedTime);
             float nextY = (Y += VelocityY * elapsedTime);
-
+            
             VelocityX = 0f;
             VelocityY += 0.0015265f * Grid.Size;
 
             if (KeyListener.IsKeyPressed(Keys.A))
             {
-                VelocityX = -(0.2f + Stats.AGI * 0.05f);
+                VelocityX = -(0.2f + _stats.AGI * 0.05f);
             }
             if (KeyListener.IsKeyPressed(Keys.D))
             {
-                VelocityX = 0.2f + Stats.AGI * 0.05f;
+                VelocityX = 0.2f + _stats.AGI * 0.05f;
             }
             if (KeyListener.IsKeyPressed(Keys.LeftShift))
             {
-                VelocityX *= 2 + Stats.AGI * 0.1f;
+                VelocityX *= 2 + _stats.AGI * 0.1f;
             }
+
+            if (KeyListener.IsKeyPressed(Keys.E))
+            {
+                MouseState ms = Mouse.GetState();
+
+                //Vector2 worldPos = _world.ScreenToWorld(new Vector2(ms.X, ms.Y));
+                //Debug.WriteLine(worldPos + ", " + "{" + this.X + ", " + this.Y + "}");
+                //float dir_x = worldPos.X - this.X;
+                //float dir_y = worldPos.Y - this.Y;
+                
+                //_world.CreateProjectile(0, (int)X, (int)(Y - 2), dir_x, dir_y);
+
+            }
+
             bool grounded = IsCollidingBelow(currentY, nextY, out List<Tile> tilesCollided);
             if (KeyListener.IsKeyPressed(Keys.Space))
             {
                 if(grounded)
                 {
-                    VelocityY -= (0.75f + Stats.AGI * 0.1f);
+                    VelocityY -= (0.75f + _stats.AGI * 0.1f);
                 }
                 
             }
 
-            
             base.Update(gameTime);
         }
     }
