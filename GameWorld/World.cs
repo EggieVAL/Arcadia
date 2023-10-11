@@ -4,6 +4,7 @@ using Arcadia.GameWorld.Algorithms;
 using Arcadia.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace Arcadia.GameWorld
 {
@@ -42,7 +43,9 @@ namespace Arcadia.GameWorld
         /// <summary>
         /// The grid of a world.
         /// </summary>
-        public Grid Grid { get; private set; }
+        public Grid Grid { get; init; }
+
+        public List<Camera> Cameras { get; init; }
 
         /// <summary>
         /// The width of the grid in terms of tiles.
@@ -75,17 +78,18 @@ namespace Arcadia.GameWorld
         /// <param name="seed">The seed of the world.</param>
         /// <param name="width">The width of the world in terms of tiles.</param>
         /// <param name="height">The height of the world in terms of tiles.</param>
-        public World(long seed, int width, int height, Camera camera)
+        public World(long seed, int width, int height)
         {
             Grid = new Grid(width, height);
             Seed = seed;
-            _camera = camera;
+
+            Cameras = new List<Camera>();
 
             UniversalRandom.SetSeed(seed);
         }
 
         // this method will be changed; should not have any parameters
-        public void Generate(Texture2D texture)
+        public virtual void Generate(Texture2D texture)
         {
             int[,] world = new int[Width, Height];
 
@@ -105,29 +109,43 @@ namespace Arcadia.GameWorld
                 }
             }
         }
-
-        public void Update(GameTime gameTime)
+        public virtual void Update(GameTime gameTime)
         {
         }
 
-        // currently draws all tiles in the world; will be changed.
-        public void Draw(GameTime gameTime)
+        public virtual void Draw(GameTime gameTime)
         {
-            _camera.GetExtents(out float left, out float right, out float top, out float bottom);
-
-            int[] minPos = Grid.GetPosition(left, top);
-            int[] maxPos = Grid.GetPosition(right, bottom);
-           
-            for (int tileX = minPos[0]; tileX <= maxPos[0]; ++tileX)
+            foreach (Camera camera in Cameras)
             {
-                for (int tileY = minPos[1]; tileY <= maxPos[1]; ++tileY)
+                RenderCameraView(gameTime, camera);
+            }
+        }
+
+        public void AddCamera(Camera camera)
+        {
+            if (camera != null)
+            {
+                Cameras.Add(camera);
+            }
+        }
+
+        private void RenderCameraView(GameTime gameTime, Camera camera)
+        {
+            camera.GetExtents(out float left, out float right, out float top, out float bottom);
+
+            int minTileX = MathHelper.Clamp(Grid.GetPosition(left), 0, Width-1);
+            int maxTileX = MathHelper.Clamp(Grid.GetPosition(right), 0, Width-1);
+            int minTileY = MathHelper.Clamp(Grid.GetPosition(top), 0, Height-1);
+            int maxTileY = MathHelper.Clamp(Grid.GetPosition(bottom), 0, Height-1);
+
+            for (int tileX = minTileX; tileX <= maxTileX; ++tileX)
+            {
+                for (int tileY = minTileY; tileY <= maxTileY; ++tileY)
                 {
                     Tile tile = Grid[tileX, tileY];
                     tile?.Draw(gameTime);
                 }
             }
         }
-
-        private Camera _camera;
     }
 }
