@@ -14,6 +14,11 @@ namespace Arcadia.GameObjects
 
         World _world;
 
+        float disappearTimer;
+        float disappearTime;
+
+        bool isGrounded;
+
         /// <summary>
         /// Is the character falling?
         /// </summary>
@@ -54,12 +59,17 @@ namespace Arcadia.GameObjects
             VelocityX = 0; 
             VelocityY = 0.0015265f * Grid.Size;
             _world = world;
+            disappearTime = 10;
+            disappearTimer = disappearTime;
+            isGrounded = false;
         }
         public Projectile(Texture2D[] texture, Rectangle bounds, int X, int Y, float VelX, float VelY, World world) : base(texture, bounds)
         {
             VelocityX = 0;
             VelocityY = 0.0015265f * Grid.Size;
             _world = world;
+            disappearTime = 10;
+            disappearTimer = disappearTime;
             Fire(X, Y, VelX, VelY);
         }
 
@@ -69,34 +79,47 @@ namespace Arcadia.GameObjects
             this.Y = Y;
             this.VelocityX += VelocityX;
             this.VelocityY += VelocityY;
+            isGrounded = false;
         }
 
         public override void Update(GameTime gameTime)
         {
-            float elapsedTime = gameTime.ElapsedGameTime.Milliseconds;
+            float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             float currentX = X;
             float currentY = Y;
-            float nextX = (X += VelocityX * elapsedTime);
-            float nextY = (Y += VelocityY * elapsedTime);
+            float nextX = (X += VelocityX * elapsedTime * 1000);
+            float nextY = (Y += VelocityY * elapsedTime * 1000);
 
             VelocityY += 0.0015265f * Grid.Size;
 
             if (IsCollidingBelow(currentY, nextY, out List<Tile> tilesCollided))
             {
                 handleBottomCollision(tilesCollided);
+                isGrounded = true;
             }
             else if (IsCollidingAbove(currentY, nextY, out tilesCollided))
             {
                 handleTopCollision(tilesCollided);
+                isGrounded = true;
             }
-
             if (IsCollidingToTheLeft(currentX, nextX, out tilesCollided))
             {
                 handleLeftCollision(tilesCollided);
+                isGrounded = true;
             }
             else if (IsCollidingToTheRight(currentX, nextX, out tilesCollided))
             {
                 handleRightCollision(tilesCollided);
+                isGrounded = true;
+            }
+
+            if (isGrounded)
+            {
+                disappearTimer -= elapsedTime;
+                if(disappearTimer <= 0)
+                {
+                    _world.Destroy(this);
+                }
             }
 
         }

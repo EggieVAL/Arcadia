@@ -80,8 +80,8 @@ namespace Arcadia.GameObjects.Characters
                     Vector2 dir = new Vector2(worldPos.X - this.X, worldPos.Y - this.Y);
 
                     dir.Normalize();
-
-                    _world.CreateProjectile(0, (int)X, (int)(Y - 2), dir.X*3, dir.Y * 3);
+                    dir *= 3 + (_stats.DEX/10);
+                    _world.CreateProjectile(0, (int)X, (int)(Y - 2), dir.X, dir.Y);
                     abilityCooldownTimer = abilityCooldown;
                 }
             }

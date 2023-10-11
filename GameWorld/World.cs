@@ -128,6 +128,11 @@ namespace Arcadia.GameWorld
             return new Vector2(x, y);
         }
 
+        public void Destroy(RenderableObject g)
+        {
+            _entities.Remove(g);
+        }
+
         // currently updates all tiles in the world; may be prone to change
         public void Update(GameTime gameTime)
         {
