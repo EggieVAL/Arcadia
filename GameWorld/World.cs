@@ -1,9 +1,10 @@
 using Arcadia.GameObjects;
+using Arcadia.GameObjects.Characters;
 using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld.Algorithms;
 using Arcadia.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Arcadia.GameWorld
@@ -45,6 +46,8 @@ namespace Arcadia.GameWorld
         /// </summary>
         public Grid Grid { get; init; }
 
+        public List<Player> Players { get; init; }
+
         public List<Camera> Cameras { get; init; }
 
         /// <summary>
@@ -83,44 +86,75 @@ namespace Arcadia.GameWorld
             Grid = new Grid(width, height);
             Seed = seed;
 
+            Players = new List<Player>();
             Cameras = new List<Camera>();
 
             UniversalRandom.SetSeed(seed);
         }
 
-        // this method will be changed; should not have any parameters
-        public virtual void Generate(Texture2D texture)
+        public World(int width, int height) : this(Guid.NewGuid().GetHashCode(), width, height) { }
+
+        // TODO: fix generate method
+        public virtual void Generate()
         {
             int[,] world = new int[Width, Height];
 
             EmptyArea.Run(world);
             GenerateTerrain.Run(world, Height/2, (int) Ink.Default);
-            //GenerateCaves.Run(world, 50, 5);
-            //RemoveAirBubbles.Run(world, 15);
-            //RemovePatchesOfBlocks.Run(world, 15);
+
+            int[,] surface = new int[Width, 6];
+            int minTileY = Height/2 + 3;
+            int maxTileY = minTileY + 6;
+
+            for (int tileX = 0; tileX < Width; ++tileX)
+            {
+                for (int tileY = minTileY; tileY < maxTileY; ++tileY)
+                {
+                    surface[tileX, tileY - minTileY] = world[tileX, tileY];
+                }
+            }
+
+            GenerateCaves.Run(world, 50, 5);
+
+            for (int tileX = 0; tileX < Width; ++tileX)
+            {
+                for (int tileY = minTileY; tileY < maxTileY; ++tileY)
+                {
+                    world[tileX, tileY] = surface[tileX, tileY - minTileY];
+                }
+            }
+
+            RemoveAirBubbles.Run(world, 15);
+            RemovePatchesOfBlocks.Run(world, 15);
 
             for (int tileX = 0; tileX < Width; ++tileX)
             {
                 for (int tileY = 0; tileY < Height; ++tileY)
                 {
                     int ink = world[tileX, tileY];
-                    Grid[tileX, tileY] = (ink == (int) Ink.Transparent || ink == (int) Ink.Ignore)
-                        ? null : new Dirt(texture, tileX, tileY);
                 }
             }
         }
 
-        // currently updates all tiles in the world; may be prone to change
+        // needs fixing
+        // spawning character on the first tile found, but never checks if there is
+        // space to spawn character in
+        public virtual void SpawnPlayer(Player player, int tileX, int tileY = 0)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            Tile firstTileFound = FindFirstTile(tileX, tileY);
+            player.X = firstTileFound.X;
+            player.Y = firstTileFound.Y - player.Height;
+
+            Players.Add(player);
+        }
+
         public virtual void Update(GameTime gameTime)
         {
-            for (int tileX = 0; tileX < Width; ++tileX)
-            {
-                for (int tileY = 0; tileY < Height; ++tileY)
-                {
-                    Tile tile = Grid[tileX, tileY];
-                    tile?.Update(gameTime);
-                }
-            }
         }
 
         public virtual void Draw(GameTime gameTime)
@@ -129,6 +163,23 @@ namespace Arcadia.GameWorld
             {
                 RenderCameraView(gameTime, camera);
             }
+        }
+
+        public Tile FindFirstTile(int tileX, int tileY)
+        {
+            for (; tileY < Height; ++tileY)
+            {
+                Tile tileFound = Grid[tileX, tileY];
+                if (tileFound is null)
+                {
+                    continue;
+                }
+                if (tileFound.Ink != (int) Ink.Transparent)
+                {
+                    return tileFound;
+                }
+            }
+            return null;
         }
 
         public void AddCamera(Camera camera)
