@@ -37,7 +37,7 @@ namespace Arcadia.GameObjects.Tiles
         /// <param name="texture">The texture of a tile.</param>
         /// <param name="tileX">The x-coordinate in the grid space.</param>
         /// <param name="tileY">The y-coordinate in the grid space.</param>
-        public Tile(Texture2D texture, int tileX, int tileY) : base(texture, GetBounds(tileX, tileY))
+        public Tile(Texture2D[] texture, int tileX, int tileY) : base(texture, GetBounds(tileX, tileY))
         {
             IsBreakable = true;
             Hardness = 0;

@@ -2,8 +2,11 @@ using Arcadia.GameObjects;
 using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld.Algorithms;
 using Arcadia.Graphics;
+using Arcadia.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Arcadia.GameWorld
 {
@@ -12,6 +15,10 @@ namespace Arcadia.GameWorld
     /// </summary>
     public class World
     {
+        public List<RenderableObject> _entities;
+
+        Texture2D[][] _miscEntityTextures;
+
         /// <summary>
         /// The width and height of a small world, respectively.
         /// </summary>
@@ -75,17 +82,21 @@ namespace Arcadia.GameWorld
         /// <param name="seed">The seed of the world.</param>
         /// <param name="width">The width of the world in terms of tiles.</param>
         /// <param name="height">The height of the world in terms of tiles.</param>
-        public World(long seed, int width, int height, Camera camera)
+        public World(long seed, int width, int height, Camera camera, Texture2D[][] EntityTextures)
         {
             Grid = new Grid(width, height);
             Seed = seed;
             _camera = camera;
 
+            _miscEntityTextures = EntityTextures;
+
+            _entities = new List<RenderableObject>();
+
             UniversalRandom.SetSeed(seed);
         }
 
         // this method will be changed; should not have any parameters
-        public void Generate(Texture2D texture)
+        public void Generate(Texture2D[] texture)
         {
             int[,] world = new int[Width, Height];
 
@@ -104,6 +115,22 @@ namespace Arcadia.GameWorld
                         ? null : new Dirt(texture, tileX, tileY);
                 }
             }
+        }
+
+        public void CreateProjectile(int me_id, int X, int Y, float VelocityX, float VelocityY)
+        {
+            _entities.Add(new Projectile(_miscEntityTextures[me_id], new Rectangle(0,0,2*Grid.Size,1 * Grid.Size), X,Y, VelocityX, VelocityY, this));
+        }
+
+        public Vector2 GetMousePosition()
+        {
+            MouseListener.PositionRelativeToCamera(_camera, out float x, out float y);
+            return new Vector2(x, y);
+        }
+
+        public void Destroy(RenderableObject g)
+        {
+            _entities.Remove(g);
         }
 
         // currently updates all tiles in the world; may be prone to change
