@@ -58,12 +58,10 @@ namespace Arcadia
             _playerTexture = Content.Load<Texture2D>("test/playertest");
             _tileTexture = Content.Load<Texture2D>("test/tiletest");
 
-            _player = new Player(PlayerClass.Warrior, _playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world);
+            _player = new Player(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world);
 
             _tile = new Dirt(_tileTexture, 0, 0);
-            _world.Generate(_tileTexture);
-            _world.SpawnPlayer(_player, _world.Width / 2);
-            //_world[0, 0] = _tile;
+            _world.Generate();
 
             _camera.Follow(_player);
         }

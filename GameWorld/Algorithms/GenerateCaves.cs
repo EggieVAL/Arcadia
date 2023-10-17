@@ -16,7 +16,7 @@ namespace Arcadia.GameWorld.Algorithms
         /// <param name="smoothRate">The smooth rate affects the roughness of the caves.</param>
         public static void Run(int[,] area, int density, int smoothRate)
         {
-            GenerateTilesRandomly.Run(area, density, new Brush((int) Ink.Transparent));
+            GenerateTilesRandomly.Run(area, density, new Brush(Ink.Transparent));
 
             for (int i = 0; i < smoothRate; ++i)
             {
@@ -40,11 +40,11 @@ namespace Arcadia.GameWorld.Algorithms
             int numberOfSurroundingAir = NumberOfSurroundingAir(area, x, y);
             if (numberOfSurroundingAir > 4)
             {
-                area[x, y] = (int) Ink.Transparent;
+                area[x, y] = Ink.Transparent;
             }
             else if (numberOfSurroundingAir < 4)
             {
-                area[x, y] = (int) Ink.Default;
+                area[x, y] = Ink.Default;
             }
         }
 
@@ -100,8 +100,7 @@ namespace Arcadia.GameWorld.Algorithms
 
         private static bool IsAir(int[,] area, int x, int y)
         {
-            return !Grid.InBounds(area, x, y)
-                || area[x, y] == (int) Ink.Transparent;
+            return !Grid.InBounds(area, x, y) || area[x, y] == Ink.Transparent;
         }
     }
 }

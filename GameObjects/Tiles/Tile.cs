@@ -46,12 +46,12 @@ namespace Arcadia.GameObjects.Tiles
         /// <summary>
         /// Gets the bounds of a tile at a position.
         /// </summary>
-        /// <param name="gridX">the x-coordinate in the grid space.</param>
-        /// <param name="gridY">The y-coordinate in the grid space.</param>
+        /// <param name="tileX">the x-coordinate in the grid space.</param>
+        /// <param name="tileY">The y-coordinate in the grid space.</param>
         /// <returns>Returns the bounds of a tile at a position.</returns>
-        public static Rectangle GetBounds(int gridX, int gridY)
+        public static Rectangle GetBounds(int tileX, int tileY)
         {
-            return new Rectangle(Grid.ConvertToUnits(gridX), Grid.ConvertToUnits(gridY), Grid.Size, Grid.Size);
+            return new Rectangle(Grid.ConvertToUnits(tileX), Grid.ConvertToUnits(tileY), Grid.Size, Grid.Size);
         }
     }
 }

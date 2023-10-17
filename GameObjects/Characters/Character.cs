@@ -89,20 +89,20 @@ namespace Arcadia.GameObjects.Characters
 
             if (IsCollidingBelow(currentY, nextY, out List<Tile> tilesCollided))
             {
-                handleBottomCollision(tilesCollided);
+                HandleBottomCollision(tilesCollided);
             }
             else if (IsCollidingAbove(currentY, nextY, out tilesCollided))
             {
-                handleTopCollision(tilesCollided);
+                HandleTopCollision(tilesCollided);
             }
 
             if (IsCollidingToTheLeft(currentX, nextX, out tilesCollided))
             {
-                handleLeftCollision(tilesCollided);
+                HandleLeftCollision(tilesCollided);
             }
             else if (IsCollidingToTheRight(currentX, nextX, out tilesCollided))
             {
-                handleRightCollision(tilesCollided);
+                HandleRightCollision(tilesCollided);
             }
         }
         
@@ -290,7 +290,7 @@ namespace Arcadia.GameObjects.Characters
             return false;
         }
 
-        private void handleTopCollision(List<Tile> tilesCollided)
+        private void HandleTopCollision(List<Tile> tilesCollided)
         {
             if (tilesCollided.Count == 0)
             {
@@ -301,7 +301,7 @@ namespace Arcadia.GameObjects.Characters
             Y = tilesCollided[0].Y + Grid.Size;
         }
 
-        private void handleBottomCollision(List<Tile> tilesCollided)
+        private void HandleBottomCollision(List<Tile> tilesCollided)
         {
             if (tilesCollided.Count == 0)
             {
@@ -312,7 +312,7 @@ namespace Arcadia.GameObjects.Characters
             Y = tilesCollided[0].Y - Height;
         }
 
-        private void handleLeftCollision(List<Tile> tilesCollided)
+        private void HandleLeftCollision(List<Tile> tilesCollided)
         {
             if (tilesCollided.Count == 0)
             {
@@ -340,7 +340,7 @@ namespace Arcadia.GameObjects.Characters
             }
         }
 
-        private void handleRightCollision(List<Tile> tilesCollided)
+        private void HandleRightCollision(List<Tile> tilesCollided)
         {
             if (tilesCollided.Count == 0)
             {

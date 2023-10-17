@@ -21,7 +21,7 @@ namespace Arcadia.GameWorld.Algorithms
             {
                 for (int y = 0; y < area.GetLength(1); ++y)
                 {
-                    FloodFill.Run(area, x, y, maximumBlocks, (int) Ink.Transparent, IsBlock);
+                    FloodFill.Run(area, x, y, maximumBlocks, Ink.Transparent, IsBlock);
                 }
             }
         }
@@ -29,7 +29,7 @@ namespace Arcadia.GameWorld.Algorithms
         private static bool IsBlock(int[,] area, Point point)
         {
             return Grid.InBounds(area, point.X, point.Y)
-                && area[point.X, point.Y] != (int) Ink.Transparent;
+                && area[point.X, point.Y] != Ink.Transparent;
         }
     }
 }

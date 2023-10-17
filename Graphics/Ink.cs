@@ -3,21 +3,21 @@
     /// <summary>
     /// Some different types of <see cref="Ink"/>s.
     /// </summary>
-    public enum Ink
+    public static class Ink
     {
         /// <summary>
         /// Ignore this ink when performing algorithms.
         /// </summary>
-        Ignore = -1,
+        public static readonly int Ignore = -1;
 
         /// <summary>
         /// An ink that's transparent.
         /// </summary>
-        Transparent = 0,
+        public static readonly int Transparent = 0;
 
         /// <summary>
         /// The default ink.
         /// </summary>
-        Default = 1
+        public static readonly int Default = 1;
     }
 }
