@@ -16,7 +16,7 @@ namespace Arcadia.GameWorld.Algorithms
         /// <param name="area">The area to remove air bubbles in.</param>
         /// <param name="maximumAir">Any connected area of air greater than this value will not be considered an air bubble.</param>
         /// <param name="ink">The ink used for filling air bubbles.</param>
-        public static void Run(int[,] area, int maximumAir, int ink = (int) Ink.Default)
+        public static void Run(int[,] area, int maximumAir, int ink)
         {
             if (ink == (int) Ink.Transparent)
             {
@@ -35,7 +35,7 @@ namespace Arcadia.GameWorld.Algorithms
         private static bool IsAir(int[,] area, Point point)
         {
             return Grid.InBounds(area, point.X, point.Y)
-                && area[point.X, point.Y] == (int) Ink.Transparent;
+                && area[point.X, point.Y] == Ink.Transparent;
         }
     }
 }

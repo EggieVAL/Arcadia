@@ -5,7 +5,7 @@ namespace Arcadia.GameObjects.Tiles
 {
     public sealed class Dirt : Tile
     {
-        public Dirt(Texture2D[] texture, int gridX, int gridY) : base(texture, gridX, gridY)
+        public Dirt(Texture2D texture, int gridX, int gridY) : base(texture, gridX, gridY)
         {
         }
 

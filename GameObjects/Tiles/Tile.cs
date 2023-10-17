@@ -11,21 +11,6 @@ namespace Arcadia.GameObjects.Tiles
     public abstract class Tile : RenderableObject
     {
         /// <summary>
-        /// Is the tile breakable?
-        /// </summary>
-        public bool IsBreakable { get; protected set; }
-
-        /// <summary>
-        /// Does the tile have a hitbox?
-        /// </summary>
-        public bool HasHitbox { get; set; }
-
-        /// <summary>
-        /// The hardness value of a tile.
-        /// </summary>
-        public int Hardness { get; protected set; }
-
-        /// <summary>
         /// The ink value of a tile. A specific tile can be referenced by its ink value. For example,
         /// all dirt tiles have an ink value of 1.
         /// </summary>
@@ -37,10 +22,8 @@ namespace Arcadia.GameObjects.Tiles
         /// <param name="texture">The texture of a tile.</param>
         /// <param name="tileX">The x-coordinate in the grid space.</param>
         /// <param name="tileY">The y-coordinate in the grid space.</param>
-        public Tile(Texture2D[] texture, int tileX, int tileY) : base(texture, GetBounds(tileX, tileY))
+        public Tile(Texture2D texture, int tileX, int tileY) : base(texture, GetBounds(tileX, tileY))
         {
-            IsBreakable = true;
-            Hardness = 0;
         }
 
         /// <summary>

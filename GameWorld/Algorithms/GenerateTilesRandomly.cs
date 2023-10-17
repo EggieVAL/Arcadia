@@ -58,7 +58,7 @@ namespace Arcadia.GameWorld.Algorithms
                     int indexY = y - minY;
                     int ink = paintedArea[indexX, indexY];
 
-                    if (ink != (int) Ink.Ignore)
+                    if (ink != Ink.Ignore)
                     {
                         area[x, y] = ink;
                     }
