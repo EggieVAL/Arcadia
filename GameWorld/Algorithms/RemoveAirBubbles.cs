@@ -1,6 +1,5 @@
 ﻿using Arcadia.Graphics;
 using Microsoft.Xna.Framework;
-using System;
 
 namespace Arcadia.GameWorld.Algorithms
 {
@@ -18,7 +17,7 @@ namespace Arcadia.GameWorld.Algorithms
         /// <param name="ink">The ink used for filling air bubbles.</param>
         public static void Run(int[,] area, int maximumAir, int ink)
         {
-            if (ink == (int) Ink.Transparent)
+            if (ink == Ink.Transparent)
             {
                 return;
             }
@@ -34,8 +33,7 @@ namespace Arcadia.GameWorld.Algorithms
 
         private static bool IsAir(int[,] area, Point point)
         {
-            return Grid.InBounds(area, point.X, point.Y)
-                && area[point.X, point.Y] == Ink.Transparent;
+            return Grid.InBounds(area, point.X, point.Y) && area[point.X, point.Y] == Ink.Transparent;
         }
     }
 }

@@ -1,11 +1,8 @@
-﻿using Arcadia.GameObjects.Tiles;
-using Arcadia.GameWorld;
+﻿using Arcadia.GameWorld;
 using Arcadia.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Arcadia.GameObjects.Characters
 {

@@ -101,9 +101,6 @@ namespace Arcadia.GameWorld
 
             EmptyArea.Run(world);
             GenerateTerrain.Run(world, Height/2, Ink.Default);
-            //GenerateCaves.Run(world, 50, 5);
-            //RemoveAirBubbles.Run(world, 15);
-            //RemovePatchesOfBlocks.Run(world, 15);
 
             int[,] surface = new int[Width, 6];
             int minTileY = Height/2 + 3;
@@ -178,7 +175,7 @@ namespace Arcadia.GameWorld
                 {
                     continue;
                 }
-                if (tileFound.Ink != (int) Ink.Transparent)
+                if (tileFound.Ink != Ink.Transparent)
                 {
                     return tileFound;
                 }
