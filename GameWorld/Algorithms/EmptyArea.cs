@@ -17,7 +17,7 @@ namespace Arcadia.GameWorld.Algorithms
             {
                 for (int y = 0; y < area.GetLength(1); ++y)
                 {
-                    area[x, y] = (int) Ink.Transparent;
+                    area[x, y] = Ink.Transparent;
                 }
             }
         }

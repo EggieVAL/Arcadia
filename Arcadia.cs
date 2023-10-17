@@ -7,7 +7,6 @@ using Arcadia.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
-using System.Collections.Generic;
 
 namespace Arcadia
 {
@@ -54,33 +53,15 @@ namespace Arcadia
             SpriteManager.CreateInstance(this);
 
             // TODO: use this.Content to load your game content here
-            _playerTexture = new Texture2D[3];
-            _playerTexture[0]= Content.Load<Texture2D>("test/playertest_0");
-            _playerTexture[1] = Content.Load<Texture2D>("test/playertest_1");
-            _playerTexture[2] = Content.Load<Texture2D>("test/playertest_2");
+            _playerTexture = Content.Load<Texture2D>("test/playertest");
+            _tileTexture = Content.Load<Texture2D>("test/tiletest");
 
-            _tileTexture = new Texture2D[1];
-            _tileTexture[0] = Content.Load<Texture2D>("test/tiletest");
+            _world = new World(69, 200, 150, _camera);
 
-            _miscEntityTextures = new Texture2D[1][];
-            _miscEntityTextures[0] = new Texture2D[1];
-            _miscEntityTextures[0][0] = Content.Load<Texture2D>("test/projectiletest");
-
-            _world = new World(69, 200, 150, _camera, _miscEntityTextures);
-
-            _player = new Player(PlayerClass.Warrior, _playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world)
+            _player = new Player(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world)
             {
                 Y = 75 * Grid.Size
             };
-
-            _enemy = new Mob(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world)
-            {
-                X = 40,
-                Y = 75 * Grid.Size
-            };
-
-            _world._entities.Add(_player);
-            _world._entities.Add(_enemy);
 
             _tile = new Dirt(_tileTexture, 0, 0);
             _world.Generate(_tileTexture);
@@ -99,14 +80,8 @@ namespace Arcadia
             KeyListener.Update();
             MouseListener.Update();
             _screen.Update();
-
-            for(int i = 0; i < _world._entities.Count; i++)
-            {
-                _world._entities[i].Update(gameTime);
-            }
+            _player.Update(gameTime);
             _camera.Update(gameTime);
-
-            _enemy.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -123,10 +98,7 @@ namespace Arcadia
 
             SpriteManager.Begin(_camera, false);
             _world.Draw(gameTime);
-            for (int i = 0; i < _world._entities.Count; i++)
-            {
-                _world._entities[i].Draw(gameTime);
-            }
+            _player.Draw(gameTime);
             SpriteManager.End();
 
             _scene.DisableRenderTargeting();
@@ -150,12 +122,9 @@ namespace Arcadia
         private Player _player;
         private Tile _tile;
 
-        private Mob _enemy;
-
         private World _world;
 
-        private Texture2D[] _playerTexture;
-        private Texture2D[] _tileTexture;
-        private Texture2D[][] _miscEntityTextures;
+        private Texture2D _playerTexture;
+        private Texture2D _tileTexture;
     }
 }
