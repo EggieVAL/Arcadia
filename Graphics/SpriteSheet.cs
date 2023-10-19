@@ -1,63 +1,88 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
 namespace Arcadia.Graphics
 {
     public sealed class SpriteSheet
     {
-        public Rectangle? this[int row, int col] => GetSprite(row, col);
+        public Rectangle? this[int row, int column] => GetSprite(row, column);
 
-        public List<Rectangle> this[int row] => GetRowOfSprites(row);
+        public Rectangle[] this[int row] => GetRowOfSprites(row);
+
+        public int NumberOfRows => _sprites.Length;
+
+        public int NumberOfColumns => _sprites[0].Length;
 
         public Texture2D Atlas { get; init; }
+
+        public SpriteSheet(Texture2D atlas, int spriteWidth, int spriteHeight) : this(atlas, spriteWidth, spriteHeight, 0, 0) { }
 
         public SpriteSheet(Texture2D atlas, int spriteWidth, int spriteHeight, int gap) : this(atlas, spriteWidth, spriteHeight, gap, gap) { }
 
         public SpriteSheet(Texture2D atlas, int spriteWidth, int spriteHeight, int horizontalGap, int verticalGap)
         {
             Atlas = atlas;
-            _sprites = new List<List<Rectangle>>();
+            _sprites = new Rectangle[MaxNumberOfSprites(Atlas.Height, spriteHeight, verticalGap)][];
 
-            FindSourceRectangles(spriteWidth, spriteHeight, horizontalGap, verticalGap);
+            FindSprites(spriteWidth, spriteHeight, horizontalGap, verticalGap);
         }
 
-        public List<Rectangle> GetRowOfSprites(int row)
+        public Rectangle? GetSprite(int row, int column)
         {
-            if (row >= _sprites.Count)
+            if (row >= NumberOfRows || column >= NumberOfColumns)
+            {
+                return null;
+            }
+            return _sprites[row][column];
+        }
+
+        public Rectangle[] GetRowOfSprites(int row)
+        {
+            if (row >= NumberOfRows)
             {
                 return null;
             }
             return _sprites[row];
         }
 
-        public Rectangle? GetSprite(int row, int col)
+        private void FindSprites(int spriteWidth, int spriteHeight, int horizontalGap, int verticalGap)
         {
-            if (row >= _sprites.Count)
-            {
-                return null;
-            }
-            if (col >= _sprites[row].Count)
-            {
-                return null;
-            }
-            return _sprites[row][col];
-        }
+            int numberOfColumns = MaxNumberOfSprites(Atlas.Width, spriteWidth, horizontalGap);
+            int offsetX = spriteWidth + horizontalGap;
+            int offsetY = spriteHeight + verticalGap;
+            int y = 0;
 
-        private void FindSourceRectangles(int spriteWidth, int spriteHeight, int horizontalGap, int verticalGap)
-        {
-            for (int y = 0; y < Atlas.Height; y += spriteHeight + verticalGap)
+            for (int row = 0; row < NumberOfRows; ++row)
             {
-                List<Rectangle> rowOfSourceRectangles = new();
-                for (int x = 0; x < Atlas.Width; x += spriteWidth + horizontalGap)
+                Rectangle[] rowOfSprites = new Rectangle[numberOfColumns];
+                int x = 0;
+
+                for (int column = 0; column < numberOfColumns; ++column)
                 {
-                    Rectangle rectangle = new(x, y, spriteWidth, spriteHeight);
-                    rowOfSourceRectangles.Add(rectangle);
+                    rowOfSprites[column] = new Rectangle(x, y, spriteWidth, spriteHeight);
+                    x += offsetX;
                 }
-                _sprites.Add(rowOfSourceRectangles);
+
+                _sprites[row] = rowOfSprites;
+                y += offsetY;
             }
         }
 
-        private readonly List<List<Rectangle>> _sprites;
+        private static int MaxNumberOfSprites(int sheetDimension, int spriteDimension, int gap)
+        {
+            int offset = spriteDimension + gap;
+            int numberOfSprites = 1;
+
+            sheetDimension -= spriteDimension;
+            while (sheetDimension > 0)
+            {
+                sheetDimension -= offset;
+                numberOfSprites++;
+            }
+
+            return numberOfSprites;
+        }
+
+        private readonly Rectangle[][] _sprites;
     }
 }

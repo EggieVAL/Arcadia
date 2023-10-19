@@ -127,8 +127,7 @@ namespace Arcadia.GameWorld
         /// <returns></returns>
         public bool InBounds(int tileX, int tileY)
         {
-            return (tileX >= 0 && tileX < Width)
-                && (tileY >= 0 && tileY < Height);
+            return (tileX >= 0 && tileX < Width) && (tileY >= 0 && tileY < Height);
         }
 
         private Tile[,] _grid;
