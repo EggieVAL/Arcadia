@@ -29,7 +29,7 @@ namespace Arcadia.GameObjects.Characters
         public override void Update(GameTime gameTime)
         {
             VelocityX = 0f;
-            VelocityY += 0.0015265f * Grid.Size;
+            // VelocityY += 0.0015265f * Grid.Size;
 
             if (KeyListener.IsKeyPressed(Keys.A))
             {
