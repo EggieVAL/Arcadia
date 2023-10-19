@@ -132,7 +132,6 @@ namespace Arcadia.GameWorld
                 for (int tileY = 0; tileY < Height; ++tileY)
                 {
                     int ink = world[tileX, tileY];
-
                 }
             }
         }

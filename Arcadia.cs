@@ -51,7 +51,6 @@ namespace Arcadia
         protected override void LoadContent()
         {
             SpriteManager.CreateInstance(this);
-
             _world = new World(69, 1000, 500);
             _world.AddCamera(_camera);
 
