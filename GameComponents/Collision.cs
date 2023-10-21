@@ -28,10 +28,46 @@ namespace Arcadia.Graphics.Shapes
                     return true;
                 }
             }
+            else if (Shape is Circle && collision.Shape is Circle)
+            {
+                Circle circle1 = (Circle)Shape;
+                Circle circle2 = (Circle)collision.Shape;
 
-                // Handle collision detection for other shape types here
+                // Calculate the distance between the centers of the circles
+                float distance = MathF.Sqrt(
+                    (circle2.Center.X - circle1.Center.X) * (circle2.Center.X - circle1.Center.X) +
+                    (circle2.Center.Y - circle1.Center.Y) * (circle2.Center.Y - circle1.Center.Y)
+                );
 
-                return false; // Default to not colliding
+                // Check for collision by comparing the distance to the sum of the radii
+                if (distance < (circle1.Radius + circle2.Radius))
+                {
+                    // Circles are colliding
+                    return true;
+                }
+            }
+            else if (Shape is Ellipse && collision.Shape is Ellipse)
+            {
+                Ellipse ellipse1 = (Ellipse)Shape;
+                Ellipse ellipse2 = (Ellipse)collision.Shape;
+
+                // Calculate the distance between the centers of the ellipses
+                float distance = MathF.Sqrt(
+                    ((ellipse2.Center.X - ellipse1.Center.X) / ellipse1.RadiusX) * ((ellipse2.Center.X - ellipse1.Center.X) / ellipse1.RadiusX) +
+                    ((ellipse2.Center.Y - ellipse1.Center.Y) / ellipse1.RadiusY) * ((ellipse2.Center.Y - ellipse1.Center.Y) / ellipse1.RadiusY)
+                );
+
+                // Check for collision by comparing the distance to 1 (the edge of an ellipse)
+                if (distance < 1)
+                {
+                    // Ellipses are colliding
+                    return true;
+                }
+            }
+
+            // Handle collision detection for other shape types here
+
+            return false; // Default to not colliding
         }
 
 
