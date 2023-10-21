@@ -64,11 +64,27 @@ namespace Arcadia.Graphics.Shapes
                     return true;
                 }
             }
+            else if (Shape is SimplePolygon && collision.Shape is SimplePolygon)
+            {
+                SimplePolygon poly1 = (SimplePolygon)Shape;
+                SimplePolygon poly2 = (SimplePolygon)collision.Shape;
+
+                // Check for collision based on bounding boxes (left, right, top, and bottom edges)
+                if (poly1.GetLeft() < poly2.GetRight() &&
+                    poly1.GetRight() > poly2.GetLeft() &&
+                    poly1.GetTop() < poly2.GetBottom() &&
+                    poly1.GetBottom() > poly2.GetTop())
+                {
+                    // SimplePolygons are colliding
+                    return true;
+                }
+            }
 
             // Handle collision detection for other shape types here
 
             return false; // Default to not colliding
         }
+
 
 
 

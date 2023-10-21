@@ -31,5 +31,59 @@ namespace Arcadia.Graphics.Shapes
         /// </summary>
         /// <param name="vertices"></param>
         public SimplePolygon(Vertex[] vertices) : base(vertices) { }
+
+        public float GetLeft()
+        {
+            float minX = float.MaxValue;
+            foreach (Vertex vertex in Vertices)
+            {
+                if (vertex.X < minX)
+                {
+                    minX = vertex.X;
+                }
+            }
+            return minX;
+        }
+
+        public float GetRight()
+        {
+            float maxX = float.MinValue;
+            foreach (Vertex vertex in Vertices)
+            {
+                if (vertex.X > maxX)
+                {
+                    maxX = vertex.X;
+                }
+            }
+            return maxX;
+        }
+
+        public float GetTop()
+        {
+            float minY = float.MaxValue;
+            foreach (Vertex vertex in Vertices)
+            {
+                if (vertex.Y < minY)
+                {
+                    minY = vertex.Y;
+                }
+            }
+            return minY;
+        }
+
+        public float GetBottom()
+        {
+            float maxY = float.MinValue;
+            foreach (Vertex vertex in Vertices)
+            {
+                if (vertex.Y > maxY)
+                {
+                    maxY = vertex.Y;
+                }
+            }
+            return maxY;
+        }
+
     }
+
 }
