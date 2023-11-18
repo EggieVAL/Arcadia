@@ -66,7 +66,7 @@ namespace Arcadia
             _miscEntityTextures[0] = new Texture2D[1];
             _miscEntityTextures[0][0] = Content.Load<Texture2D>("test/projectiletest");
 
-            _world = new World(69, 200, 150, _camera, _miscEntityTextures);
+            _world = new World(69, 500, 150, _camera, _miscEntityTextures);
 
             _player = new Player(PlayerClass.Warrior, _playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world)
             {
