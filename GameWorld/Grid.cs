@@ -131,6 +131,6 @@ namespace Arcadia.GameWorld
                 && (tileY >= 0 && tileY < Height);
         }
 
-        private Tile[,] _grid;
+        private readonly Tile[,] _grid;
     }
 }

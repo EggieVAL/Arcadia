@@ -108,7 +108,7 @@ namespace Arcadia.GameWorld.Algorithms
         private static void HandleInkPlacement(int[,] area, Point placeAt, Point inShape, Shape shape)
         {
             area[placeAt.X, placeAt.Y] = (shape.ContainsPoint(inShape.X + 0.5f, inShape.Y + 0.5f, true))
-                ? (int) Ink.Default : (int) Ink.Ignore;
+                ? Ink.Default : Ink.Ignore;
         }
     }
 }

@@ -40,11 +40,11 @@ namespace Arcadia.GameWorld.Algorithms
             int numberOfSurroundingAir = NumberOfSurroundingAir(area, x, y);
             if (numberOfSurroundingAir > 4)
             {
-                area[x, y] = (int) Ink.Transparent;
+                area[x, y] = Ink.Transparent;
             }
             else if (numberOfSurroundingAir < 4)
             {
-                area[x, y] = (int) Ink.Default;
+                area[x, y] = Ink.Default;
             }
         }
 
@@ -101,7 +101,7 @@ namespace Arcadia.GameWorld.Algorithms
         private static bool IsAir(int[,] area, int x, int y)
         {
             return !Grid.InBounds(area, x, y)
-                || area[x, y] == (int) Ink.Transparent;
+                || area[x, y] == Ink.Transparent;
         }
     }
 }
