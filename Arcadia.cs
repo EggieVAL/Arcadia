@@ -76,7 +76,7 @@ namespace Arcadia
             _enemy = new Mob(_playerTexture, new Rectangle(0, 0, Grid.Size * 2, Grid.Size * 3), _world)
             {
                 X = 40,
-                Y = 75 * Grid.Size
+                Y = 50 * Grid.Size
             };
 
             _world._entities.Add(_player);

@@ -47,6 +47,7 @@ namespace Arcadia.GameObjects
         /// </summary>
         /// <param name="texture">The texture of a renderable object.</param>
         /// <param name="bounds">The bounds of a renderable object; this is not its collider.</param>
+
         public RenderableObject(Texture2D[] texture, Rectangle bounds)
         {
             Texture = texture;
@@ -64,7 +65,7 @@ namespace Arcadia.GameObjects
         /// <param name="gameTime">The game time.</param>
         public virtual void Draw(GameTime gameTime)
         {
-            if (Texture is not null)
+            if (Texture[0] is not null)
             {
                 SpriteManager.Draw(Texture[0], Bounds, Color.White);
             }

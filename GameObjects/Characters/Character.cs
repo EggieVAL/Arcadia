@@ -1,7 +1,9 @@
 ﻿using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld;
+using Arcadia.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Arcadia.GameObjects.Characters
@@ -12,6 +14,12 @@ namespace Arcadia.GameObjects.Characters
     /// </summary>
     public abstract class Character : RenderableObject
     {
+
+        /// <summary>
+        /// The direction the character is facing. -1 is left 0 is forward, 1 is right
+        /// </summary>
+        public int direction = 1;
+
         /// <summary>
         /// The world a character is in.
         /// </summary>
@@ -87,6 +95,8 @@ namespace Arcadia.GameObjects.Characters
             float nextX = (X += VelocityX * elapsedTime);
             float nextY = (Y += VelocityY * elapsedTime);
 
+            direction = VelocityX != 0 ? (int)(VelocityX / Math.Abs(VelocityX)) : 0;
+
             if (IsCollidingBelow(currentY, nextY, out List<Tile> tilesCollided))
             {
                 handleBottomCollision(tilesCollided);
@@ -104,6 +114,12 @@ namespace Arcadia.GameObjects.Characters
             {
                 handleRightCollision(tilesCollided);
             }
+        }
+
+        //Draws based on direction character is facing (TEST CODE)
+        public override void Draw(GameTime gameTime)
+        {
+            SpriteManager.Draw(Texture[direction + 1], Bounds, Color.White);
         }
 
         /// <summary>
