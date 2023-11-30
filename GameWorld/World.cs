@@ -2,8 +2,11 @@ using Arcadia.GameObjects;
 using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld.Algorithms;
 using Arcadia.Graphics;
+using Arcadia.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Arcadia.GameWorld
 {
@@ -12,6 +15,10 @@ namespace Arcadia.GameWorld
     /// </summary>
     public class World
     {
+        public List<RenderableObject> _entities;
+
+        Texture2D[][] _miscEntityTextures;
+
         /// <summary>
         /// The width and height of a small world, respectively.
         /// </summary>
@@ -68,29 +75,33 @@ namespace Arcadia.GameWorld
         /// The seed of the world.
         /// </summary>
         public long Seed { get; init; }
-      
+
         /// <summary>
         /// Constructs a world based on the given seed.
         /// </summary>
         /// <param name="seed">The seed of the world.</param>
         /// <param name="width">The width of the world in terms of tiles.</param>
         /// <param name="height">The height of the world in terms of tiles.</param>
-        public World(long seed, int width, int height, Camera camera)
+        public World(long seed, int width, int height, Camera camera, Texture2D[][] EntityTextures)
         {
             Grid = new Grid(width, height);
             Seed = seed;
             _camera = camera;
 
+            _miscEntityTextures = EntityTextures;
+
+            _entities = new List<RenderableObject>();
+
             UniversalRandom.SetSeed(seed);
         }
 
         // this method will be changed; should not have any parameters
-        public void Generate(Texture2D texture)
+        public void Generate(Texture2D[] texture)
         {
             int[,] world = new int[Width, Height];
 
             EmptyArea.Run(world);
-            GenerateTerrain.Run(world, Height/2, Ink.Default);
+            GenerateTerrain.Run(world, Height / 2, (int)Ink.Default);
             //GenerateCaves.Run(world, 50, 5);
             //RemoveAirBubbles.Run(world, 15);
             //RemovePatchesOfBlocks.Run(world, 15);
@@ -100,14 +111,39 @@ namespace Arcadia.GameWorld
                 for (int tileY = 0; tileY < Height; ++tileY)
                 {
                     int ink = world[tileX, tileY];
-                    Grid[tileX, tileY] = (ink == Ink.Transparent || ink == Ink.Ignore)
+                    Grid[tileX, tileY] = (ink == (int)Ink.Transparent || ink == (int)Ink.Ignore)
                         ? null : new Dirt(texture, tileX, tileY);
                 }
             }
         }
 
+        public void CreateProjectile(int me_id, int X, int Y, float VelocityX, float VelocityY)
+        {
+            _entities.Add(new Projectile(_miscEntityTextures[me_id], new Rectangle(0, 0, 2 * Grid.Size, 1 * Grid.Size), X, Y, VelocityX, VelocityY, this));
+        }
+
+        public Vector2 GetMousePosition()
+        {
+            MouseListener.PositionRelativeToCamera(_camera, out float x, out float y);
+            return new Vector2(x, y);
+        }
+
+        public void Destroy(RenderableObject g)
+        {
+            _entities.Remove(g);
+        }
+
+        // currently updates all tiles in the world; may be prone to change
         public void Update(GameTime gameTime)
         {
+            for (int tileX = 0; tileX < Width; ++tileX)
+            {
+                for (int tileY = 0; tileY < Height; ++tileY)
+                {
+                    Tile tile = Grid[tileX, tileY];
+                    tile?.Update(gameTime);
+                }
+            }
         }
 
         // currently draws all tiles in the world; will be changed.
@@ -117,7 +153,7 @@ namespace Arcadia.GameWorld
 
             int[] minPos = Grid.GetPosition(left, top);
             int[] maxPos = Grid.GetPosition(right, bottom);
-           
+
             for (int tileX = minPos[0]; tileX <= maxPos[0]; ++tileX)
             {
                 for (int tileY = minPos[1]; tileY <= maxPos[1]; ++tileY)

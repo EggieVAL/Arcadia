@@ -15,7 +15,7 @@ namespace Arcadia.GameObjects
         /// <summary>
         /// The texture of a renderable object.
         /// </summary>
-        public Texture2D Texture { get; set; }
+        public Texture2D[] Texture { get; set; }
 
         /// <summary>
         /// The x-coordinate of a renderable object in units.
@@ -47,7 +47,7 @@ namespace Arcadia.GameObjects
         /// </summary>
         /// <param name="texture">The texture of a renderable object.</param>
         /// <param name="bounds">The bounds of a renderable object; this is not its collider.</param>
-        public RenderableObject(Texture2D texture, Rectangle bounds)
+        public RenderableObject(Texture2D[] texture, Rectangle bounds)
         {
             Texture = texture;
             X = bounds.X;
@@ -66,7 +66,7 @@ namespace Arcadia.GameObjects
         {
             if (Texture is not null)
             {
-                SpriteManager.Draw(Texture, Bounds, Color.White);
+                SpriteManager.Draw(Texture[0], Bounds, Color.White);
             }
 
         }

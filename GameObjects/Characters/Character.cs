@@ -68,7 +68,7 @@ namespace Arcadia.GameObjects.Characters
         /// <param name="texture">The texture of a character.</param>
         /// <param name="bounds">The bounds of a character.</param>
         /// <param name="world">The world a character is in.</param>
-        public Character(Texture2D texture, Rectangle bounds, World world) : base(texture, bounds)
+        public Character(Texture2D[] texture, Rectangle bounds, World world) : base(texture, bounds)
         {
             VelocityX = 0;
             VelocityY = 0;
