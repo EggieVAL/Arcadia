@@ -34,6 +34,7 @@
             Height = height;
         }
 
+
         private static Vertex[] GetVertices(float width, float height, Vertex center)
         {
             Vertex[] vertices = new Vertex[4];
@@ -53,5 +54,62 @@
 
             return vertices;
         }
+        public float GetLeft()
+        {
+            // Calculate the left edge based on the vertices
+            float minX = float.MaxValue;
+            foreach (Vertex vertex in Vertices)
+            {
+                if (vertex.X < minX)
+                {
+                    minX = vertex.X;
+                }
+            }
+            return minX;
+        }
+
+        public float GetRight()
+        {
+            // Calculate the right edge based on the vertices
+            float maxX = float.MinValue;
+            foreach (Vertex vertex in Vertices)
+            {
+                if (vertex.X > maxX)
+                {
+                    maxX = vertex.X;
+                }
+            }
+            return maxX;
+        }
+
+        public float GetTop()
+        {
+            // Calculate the top edge based on the vertices
+            float minY = float.MaxValue;
+            foreach (Vertex vertex in Vertices)
+            {
+                if (vertex.Y < minY)
+                {
+                    minY = vertex.Y;
+                }
+            }
+            return minY;
+        }
+
+        public float GetBottom()
+        {
+            // Calculate the bottom edge based on the vertices
+            float maxY = float.MinValue;
+            foreach (Vertex vertex in Vertices)
+            {
+                if (vertex.Y > maxY)
+                {
+                    maxY = vertex.Y;
+                }
+            }
+            return maxY;
+        }
+
+
     }
 }

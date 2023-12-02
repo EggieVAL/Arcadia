@@ -1,6 +1,8 @@
-﻿using Arcadia.GameObjects.Tiles;
+﻿using Arcadia.Components;
+using Arcadia.GameObjects.Tiles;
 using Arcadia.GameWorld;
 using Arcadia.Graphics;
+using Arcadia.Graphics.Shapes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -70,14 +72,17 @@ namespace Arcadia.GameObjects.Characters
         /// </summary>
         public bool IsMoving => IsMovingHorizontally || IsMovingVertically;
 
+        public BoxCollider collider { get; set; }
+
         /// <summary>
         /// Constructs a character in a world at the given bounds.
         /// </summary>
         /// <param name="texture">The texture of a character.</param>
         /// <param name="bounds">The bounds of a character.</param>
         /// <param name="world">The world a character is in.</param>
-        public Character(Texture2D[] texture, Rectangle bounds, World world) : base(texture, bounds)
+        public Character(Texture2D[] texture, Graphics.Shapes.Rectangle shape, World world) : base(texture, shape)
         {
+            this.collider = new BoxCollider(shape);
             VelocityX = 0;
             VelocityY = 0;
             World = world;

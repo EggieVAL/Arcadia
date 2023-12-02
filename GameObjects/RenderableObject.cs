@@ -1,4 +1,5 @@
 ﻿using Arcadia.Graphics;
+using Arcadia.Graphics.Shapes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -48,11 +49,9 @@ namespace Arcadia.GameObjects
         /// <param name="texture">The texture of a renderable object.</param>
         /// <param name="bounds">The bounds of a renderable object; this is not its collider.</param>
 
-        public RenderableObject(Texture2D[] texture, Rectangle bounds)
+        public RenderableObject(Texture2D[] texture, Graphics.Shapes.Rectangle bounds)
         {
             Texture = texture;
-            X = bounds.X;
-            Y = bounds.Y;
             Width = bounds.Width;
             Height = bounds.Height;
         }
