@@ -1,4 +1,5 @@
 ﻿using Arcadia.GameObjects;
+using Arcadia.GameWorld;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,6 @@ namespace Arcadia.Physics
         public Vector2 Start;
         public Vector2 Direction;
         public float Length = 250f;
-        public bool Collided = false;
 
         public Ray(Vector2 start, Vector2 dir)
         {
@@ -25,6 +25,11 @@ namespace Arcadia.Physics
             Start = start;
             Direction = dir;
             Length = length;
+        }
+
+        public bool Intersecting(AABB box)
+        {
+
         }
 
         public RayHit Cast()
