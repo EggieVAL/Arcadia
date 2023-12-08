@@ -1,0 +1,6 @@
+{
+    "jump": "Space",
+    "moveLeft": "A",
+    "moveRight": "D",
+    "sprint": "LeftShift"
+}
