@@ -1,0 +1,67 @@
+// MongoDB Player Schema for Fantasy RPG 2D Platformer
+
+{
+  "_id": ObjectId, // Unique identifier for each player
+  "username": String, // Username of the player
+  
+  "character": {
+    "class": String, // Chosen class (e.g., warrior, mage, archer)
+    "stats": {
+      "strength": Number, // Base stat for melee combat
+      "magic": Number, // Base stat for magic combat
+      // Other base stats depending on game mechanics
+    },
+    "equipment": [ // Inventory of equipped items
+      {
+        "item_name": String, // Name of the item
+        "type": String, // Type of item (e.g., weapon, armor, accessory)
+        // Other attributes related to the item (stats, bonuses, etc.)
+      },
+      // Additional equipped items
+    ],
+    "level": Number // Player's level
+    // Other character-related attributes as needed
+  },
+
+  "location": {
+    "biome": String, // Current biome or area of the world
+    "tower_level": Number, // Current level in the tower
+    // Other location-related information
+  },
+
+  "inventory": [
+    {
+      "item_name": String, // Name of the item in the inventory
+      "type": String, // Type of item (e.g., consumable, quest item, etc.)
+      // Other attributes related to the item
+    },
+    // Additional items in the inventory
+  ],
+
+  "economy": {
+    "gold": Number, // Amount of in-game currency
+    "loot": [
+      {
+        "item_name": String, // Name of the loot item
+        "type": String, // Type of loot (e.g., equipment, consumable)
+        // Other attributes related to the loot item
+      },
+      // Additional loot items
+    ],
+    // Other attributes related to economy (e.g., shops, transactions)
+  },
+
+  "game_progress": {
+    "current_quest": String, // Name or identifier of the current quest
+    "completed_quests": [String], // List of completed quests
+    // Other attributes related to game progress
+  },
+
+  "other_gameplay_details": {
+    "day_night_cycle": String, // Current phase of day/night cycle
+    "random_events": [String], // List of ongoing random events
+    // Other gameplay-specific attributes
+  },
+
+  // Additional attributes as per game requirements
+}

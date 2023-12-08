@@ -1,0 +1,7 @@
+{
+  "_id": ObjectId, // Unique identifier for the NPC
+  "name": String, // Name of the NPC
+  "type": String, // Type of NPC (e.g., quest giver, merchant)
+  "location": String, // Location where the NPC is found
+  // Other attributes specific to NPCs
+}

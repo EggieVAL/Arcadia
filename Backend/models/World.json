@@ -1,0 +1,31 @@
+{
+  "_id": ObjectId, // Unique identifier for the world
+  "biomes": [
+    {
+      "name": String, // Name of the biome
+      "levels": [
+        {
+          "level_number": Number, // Level number within the biome
+          "miniboss": String, // Name or identifier of the miniboss in this level
+          "environment": String, // Description or identifier of the environment/theme
+          "difficulty": String, // Difficulty level of the level (e.g., easy, medium, hard)
+          // Other attributes specific to levels
+        },
+        // Additional levels within the biome
+      ],
+      "boss": {
+        "name": String, // Name or identifier of the boss in this biome
+        "description": String, // Description or details about the boss
+        // Other attributes related to the boss
+      }
+    },
+    // Additional biomes in the world
+  ],
+  "loop_around_tower": {
+    "description": String, // Description or details about the loop around the central tower
+    // Other attributes related to the loop around the tower
+  },
+  "day_night_cycle": Boolean, // Indicates if the world has a day/night cycle
+  "random_events": [String], // List of possible random events in the world
+  // Other attributes related to the world
+}

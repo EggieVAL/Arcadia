@@ -1,0 +1,8 @@
+{
+  "_id": ObjectId, // Unique identifier for the quest
+  "name": String, // Name of the quest
+  "description": String, // Description or details about the quest
+  "type": String, // Type of quest (e.g., main quest, side quest)
+  "required_items": [String], // List of required items to complete the quest
+  // Other attributes specific to quests
+}
